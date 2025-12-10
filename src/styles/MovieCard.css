@@ -1,0 +1,233 @@
+/* MovieCard 컴포넌트 스타일 */
+
+.movie-card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: #1a1a1a;
+}
+
+/* Hover 효과 - 확대 */
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+/* 찜한 영화 스타일 */
+.movie-card.wished {
+  border: 3px solid #e50914;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+.movie-card.wished:hover {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+}
+
+/* 영화 포스터 컨테이너 */
+.movie-poster {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.movie-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .movie-poster img {
+  transform: scale(1.1);
+}
+
+/* 포스터 없을 때 표시 */
+.no-poster {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* 찜하기 버튼 */
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 20;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.movie-card:hover .wishlist-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.wishlist-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.wishlist-btn.active {
+  background: rgba(229, 9, 20, 0.9);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.wishlist-btn.active:hover {
+  background: rgba(255, 107, 107, 0.9);
+  transform: scale(1.1);
+}
+
+.heart-icon {
+  font-size: 20px;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s ease;
+}
+
+.wishlist-btn:hover .heart-icon {
+  transform: scale(1.2);
+}
+
+/* 호버 오버레이 */
+.movie-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.3) 80%,
+    transparent 100%
+  );
+  padding: 20px 15px 15px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.movie-info {
+  text-align: center;
+  color: white;
+}
+
+.movie-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.movie-rating {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #ffd700;
+}
+
+.movie-year {
+  font-size: 0.8rem;
+  color: #ccc;
+  font-weight: 500;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .movie-card {
+    width: 180px;
+    height: 270px;
+  }
+
+  .movie-title {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-card {
+    width: 160px;
+    height: 240px;
+  }
+
+  .movie-title {
+    font-size: 0.9rem;
+  }
+
+  .wishlist-btn {
+    width: 35px;
+    height: 35px;
+  }
+
+  .heart-icon {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-card {
+    width: 140px;
+    height: 210px;
+  }
+
+  .movie-title {
+    font-size: 0.85rem;
+  }
+
+  .wishlist-btn {
+    width: 30px;
+    height: 30px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .heart-icon {
+    font-size: 16px;
+  }
+
+  .movie-overlay {
+    padding: 15px 12px 12px;
+  }
+
+  .movie-rating,
+  .movie-year {
+    font-size: 0.8rem;
+  }
+}
