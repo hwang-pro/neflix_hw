@@ -3,7 +3,7 @@
 .home-container {
   min-height: 100vh;
   background: linear-gradient(to bottom, #141414 0%, #000000 100%);
-  padding-top: 80px; /* Header 높이만큼 패딩 */
+  padding-top: 0; /* Header와 붙도록 패딩 제거 */
   padding-bottom: 60px;
 }
 
@@ -44,6 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 80px; /* Header 높이만큼 여백 */
   margin-bottom: 40px;
   position: relative;
   overflow: hidden;
