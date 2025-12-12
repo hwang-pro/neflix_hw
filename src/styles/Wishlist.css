@@ -204,3 +204,189 @@
   box-shadow: 0 6px 20px rgba(229, 9, 20, 0.5);
 }
 
+/* 반응형 디자인 */
+
+/* 대형 데스크탑 (1400px ~ ) */
+@media (min-width: 1400px) {
+  .movie-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* 일반 데스크탑 (1024px ~ 1399px) */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .movie-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+  }
+}
+
+/* 태블릿 (768px ~ 1023px) */
+@media (max-width: 1023px) {
+  .wishlist-container {
+    padding-top: 80px;
+  }
+
+  .wishlist-header {
+    padding: 0 30px;
+  }
+
+  .wishlist-title {
+    font-size: 2.2rem;
+  }
+
+  .wishlist-subtitle {
+    font-size: 1rem;
+  }
+
+  .clear-all-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .wishlist-stats {
+    padding: 0 30px;
+  }
+
+  .stats-text {
+    font-size: 1rem;
+  }
+
+  .stats-text strong {
+    font-size: 1.2rem;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 30px;
+    gap: 20px;
+  }
+
+  .empty-state {
+    padding: 80px 20px;
+  }
+
+  .empty-icon {
+    font-size: 5rem;
+  }
+
+  .empty-state h3 {
+    font-size: 2rem;
+  }
+
+  .empty-state p {
+    font-size: 1.1rem;
+  }
+}
+
+/* 모바일 (767px 이하) */
+@media (max-width: 767px) {
+  .wishlist-container {
+    padding-top: 70px;
+    padding-bottom: 60px;
+  }
+
+  .wishlist-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+    margin-bottom: 30px;
+  }
+
+  .wishlist-title {
+    font-size: 1.8rem;
+  }
+
+  .wishlist-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .clear-all-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+
+  .wishlist-stats {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+
+  .stats-text {
+    font-size: 0.95rem;
+  }
+
+  .stats-text strong {
+    font-size: 1.1rem;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 20px;
+    gap: 15px;
+  }
+
+  .empty-state {
+    padding: 60px 20px;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+
+  .empty-state h3 {
+    font-size: 1.5rem;
+  }
+
+  .empty-state p {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .browse-btn {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+
+  .toast {
+    top: 70px;
+    right: 15px;
+    left: 15px;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+  }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .wishlist-title {
+    font-size: 1.5rem;
+  }
+
+  .wishlist-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .movie-grid {
+    padding: 0 15px;
+    gap: 12px;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.3rem;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+
+  .browse-btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+}
+
