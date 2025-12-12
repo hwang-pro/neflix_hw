@@ -35,6 +35,20 @@ function Wishlist() {
           </span>
         </div>
       )}
+
+      {/* 빈 상태 */}
+      {wishlistMovies.length === 0 && !loading && (
+        <div className="empty-state">
+          <div className="empty-icon">💔</div>
+          <h3>찜한 영화가 없습니다</h3>
+          <p>영화 카드의 하트 아이콘을 클릭하여 찜 목록에 추가해보세요</p>
+          <div className="empty-actions">
+            <a href="/" className="browse-btn">
+              영화 둘러보기
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
