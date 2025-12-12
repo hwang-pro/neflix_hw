@@ -38,6 +38,15 @@ function Wishlist() {
     }, 2000);
   };
 
+  // 모든 찜 목록 제거
+  const handleClearAll = () => {
+    if (window.confirm('모든 찜 목록을 삭제하시겠습니까?')) {
+      localStorage.removeItem('wishlist');
+      setWishlistMovies([]);
+      showToast('모든 찜 목록이 삭제되었습니다.');
+    }
+  };
+
   return (
     <div className="wishlist-container">
       {/* 토스트 메시지 */}
@@ -49,8 +58,15 @@ function Wishlist() {
 
       {/* 헤더 섹션 */}
       <div className="wishlist-header">
-        <h1 className="wishlist-title">❤️ 내가 찜한 리스트</h1>
-        <p className="wishlist-subtitle">나중에 보고 싶은 영화들을 모아보세요</p>
+        <div className="header-content">
+          <h1 className="wishlist-title">❤️ 내가 찜한 리스트</h1>
+          <p className="wishlist-subtitle">나중에 보고 싶은 영화들을 모아보세요</p>
+        </div>
+        {wishlistMovies.length > 0 && (
+          <button onClick={handleClearAll} className="clear-all-btn">
+            전체 삭제
+          </button>
+        )}
       </div>
 
       {/* 찜 목록 */}
