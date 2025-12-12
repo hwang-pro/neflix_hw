@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import MovieCard from '../components/MovieCard';
-import { getWishlist } from '../utils/storage';
+import { getWishlist, toggleWishlist } from '../utils/storage';
 import '../styles/Wishlist.css';
 
 function Wishlist() {
   // 상태 관리
   const [wishlistMovies, setWishlistMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 페이지 로드 시 찜 목록 불러오기
   useEffect(() => {
@@ -20,8 +21,32 @@ function Wishlist() {
     setLoading(false);
   };
 
+  // 찜하기 토글 (제거)
+  const handleToggleWish = (movie) => {
+    const result = toggleWishlist(movie);
+    showToast(result.message);
+    
+    // 목록 새로고침
+    loadWishlist();
+  };
+
+  // 토스트 메시지 표시
+  const showToast = (message) => {
+    setToast({ show: true, message });
+    setTimeout(() => {
+      setToast({ show: false, message: '' });
+    }, 2000);
+  };
+
   return (
     <div className="wishlist-container">
+      {/* 토스트 메시지 */}
+      {toast.show && (
+        <div className="toast">
+          {toast.message}
+        </div>
+      )}
+
       {/* 헤더 섹션 */}
       <div className="wishlist-header">
         <h1 className="wishlist-title">❤️ 내가 찜한 리스트</h1>
@@ -45,7 +70,7 @@ function Wishlist() {
                 key={movie.id}
                 movie={movie}
                 isWished={true}
-                onToggleWish={() => {}}
+                onToggleWish={handleToggleWish}
               />
             ))}
           </div>
