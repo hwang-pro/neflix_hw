@@ -326,26 +326,26 @@
   }
 
   .empty-state {
-    padding: 60px 20px;
+    padding: 80px 20px; /* 패딩 증가 */
   }
 
   .empty-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
+    font-size: 5rem; /* 아이콘 크기 증가 */
+    margin-bottom: 25px;
   }
 
   .empty-state h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem; /* 제목 크기 증가 */
   }
 
   .empty-state p {
-    font-size: 1rem;
-    margin-bottom: 30px;
+    font-size: 1.05rem; /* 설명 크기 증가 */
+    margin-bottom: 35px;
   }
 
   .browse-btn {
-    padding: 14px 28px;
-    font-size: 1rem;
+    padding: 16px 32px; /* 버튼 크기 증가 (터치 편의성) */
+    font-size: 1.05rem;
   }
 
   .toast {
