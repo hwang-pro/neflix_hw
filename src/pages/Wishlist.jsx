@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import MovieCard from '../components/MovieCard';
 import { getWishlist } from '../utils/storage';
 import '../styles/Wishlist.css';
 
@@ -27,13 +28,28 @@ function Wishlist() {
         <p className="wishlist-subtitle">나중에 보고 싶은 영화들을 모아보세요</p>
       </div>
 
-      {/* 통계 정보 */}
+      {/* 찜 목록 */}
       {wishlistMovies.length > 0 && (
-        <div className="wishlist-stats">
-          <span className="stats-text">
-            총 <strong>{wishlistMovies.length}</strong>개의 영화
-          </span>
-        </div>
+        <>
+          {/* 통계 정보 */}
+          <div className="wishlist-stats">
+            <span className="stats-text">
+              총 <strong>{wishlistMovies.length}</strong>개의 영화
+            </span>
+          </div>
+
+          {/* 영화 그리드 */}
+          <div className="movie-grid">
+            {wishlistMovies.map(movie => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                isWished={true}
+                onToggleWish={() => {}}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       {/* 빈 상태 */}
