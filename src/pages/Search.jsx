@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import MovieCard from '../components/MovieCard';
 import Loading from '../components/Loading';
 import { 
@@ -13,8 +13,12 @@ function Search() {
   // 상태 관리
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [minRating, setMinRating] = useState(0);
+  const [sortBy, setSortBy] = useState('popularity'); // popularity, rating, release_date
+  const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '' });
@@ -54,12 +58,14 @@ function Search() {
       
       if (result.success) {
         setMovies(result.data);
+        applyFilters(result.data);
         if (result.data.length === 0) {
           showToast('검색 결과가 없습니다.');
         }
       } else {
         showToast(result.message || '검색에 실패했습니다.');
         setMovies([]);
+        setFilteredMovies([]);
       }
     } catch (error) {
       console.error('검색 실패:', error);
@@ -82,12 +88,14 @@ function Search() {
       
       if (result.success) {
         setMovies(result.data);
+        applyFilters(result.data);
         if (result.data.length === 0) {
           showToast('해당 장르의 영화가 없습니다.');
         }
       } else {
         showToast('영화를 불러오는데 실패했습니다.');
         setMovies([]);
+        setFilteredMovies([]);
       }
     } catch (error) {
       console.error('장르별 영화 로드 실패:', error);
@@ -112,11 +120,62 @@ function Search() {
     }, 2000);
   };
 
+  // 필터링 적용 함수
+  const applyFilters = (movieList) => {
+    let filtered = [...movieList];
+
+    // 평점 필터
+    if (minRating > 0) {
+      filtered = filtered.filter(movie => 
+        movie.vote_average >= minRating
+      );
+    }
+
+    // 개봉년도 필터
+    if (year) {
+      filtered = filtered.filter(movie => {
+        if (!movie.release_date) return false;
+        const movieYear = new Date(movie.release_date).getFullYear();
+        return movieYear.toString() === year;
+      });
+    }
+
+    // 정렬
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'rating':
+          return (b.vote_average || 0) - (a.vote_average || 0);
+        case 'release_date':
+          const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
+          const dateB = b.release_date ? new Date(b.release_date) : new Date(0);
+          return dateB - dateA;
+        case 'popularity':
+        default:
+          return (b.popularity || 0) - (a.popularity || 0);
+      }
+    });
+
+    setFilteredMovies(filtered);
+  };
+
+  // 필터 변경 시 적용
+  useEffect(() => {
+    if (movies.length > 0) {
+      applyFilters(movies);
+    } else {
+      setFilteredMovies([]);
+    }
+  }, [movies, applyFilters]);
+
   // 검색 초기화
   const handleReset = () => {
     setSearchQuery('');
     setMovies([]);
+    setFilteredMovies([]);
     setSelectedGenre(null);
+    setMinRating(0);
+    setSortBy('popularity');
+    setYear('');
     setHasSearched(false);
   };
 
@@ -160,20 +219,89 @@ function Search() {
         </div>
       </form>
 
-      {/* 장르 필터 */}
-      <div className="genre-section">
-        <h2 className="genre-title">장르별 탐색</h2>
-        <div className="genre-list">
-          {genres.map(genre => (
-            <button
-              key={genre.id}
-              onClick={() => handleGenreClick(genre.id)}
-              className={`genre-btn ${selectedGenre === genre.id ? 'active' : ''}`}
-            >
-              {genre.name}
-            </button>
-          ))}
+      {/* 필터 섹션 */}
+      <div className="filters-section">
+        {/* 장르 필터 */}
+        <div className="filter-group">
+          <h3 className="filter-title">🎭 장르별 탐색</h3>
+          <div className="genre-list">
+            {genres.map(genre => (
+              <button
+                key={genre.id}
+                onClick={() => handleGenreClick(genre.id)}
+                className={`genre-btn ${selectedGenre === genre.id ? 'active' : ''}`}
+              >
+                {genre.name}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* 필터링 옵션 */}
+        {hasSearched && movies.length > 0 && (
+          <div className="filter-options">
+            <h3 className="filter-title">🔧 필터링 옵션</h3>
+            
+            {/* 평점 필터 */}
+            <div className="filter-item">
+              <label htmlFor="minRating">최소 평점: {minRating > 0 ? `${minRating}+` : '전체'}</label>
+              <input
+                type="range"
+                id="minRating"
+                min="0"
+                max="10"
+                step="0.5"
+                value={minRating}
+                onChange={(e) => setMinRating(parseFloat(e.target.value))}
+                className="rating-slider"
+              />
+            </div>
+
+            {/* 정렬 옵션 */}
+            <div className="filter-item">
+              <label htmlFor="sortBy">정렬 기준:</label>
+              <select
+                id="sortBy"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="sort-select"
+              >
+                <option value="popularity">인기순</option>
+                <option value="rating">평점순</option>
+                <option value="release_date">개봉일순</option>
+              </select>
+            </div>
+
+            {/* 개봉년도 필터 */}
+            <div className="filter-item">
+              <label htmlFor="year">개봉년도:</label>
+              <input
+                type="number"
+                id="year"
+                min="1900"
+                max={new Date().getFullYear() + 1}
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+                placeholder="전체"
+                className="year-input"
+              />
+            </div>
+
+            {/* 필터 초기화 버튼 */}
+            {(minRating > 0 || sortBy !== 'popularity' || year) && (
+              <button
+                onClick={() => {
+                  setMinRating(0);
+                  setSortBy('popularity');
+                  setYear('');
+                }}
+                className="filter-reset-btn"
+              >
+                필터 초기화
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 로딩 중 */}
@@ -192,13 +320,18 @@ function Search() {
                   }
                 </h2>
                 <p className="results-count">
-                  총 {movies.length}개의 영화
+                  총 {filteredMovies.length}개의 영화
+                  {filteredMovies.length !== movies.length && (
+                    <span className="filtered-count">
+                      (전체 {movies.length}개 중)
+                    </span>
+                  )}
                 </p>
               </div>
 
-              {movies.length > 0 ? (
+              {filteredMovies.length > 0 ? (
                 <div className="movie-grid">
-                  {movies.map(movie => (
+                  {filteredMovies.map(movie => (
                     <MovieCard
                       key={movie.id}
                       movie={movie}
