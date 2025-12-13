@@ -5,7 +5,8 @@ import {
   fetchPopularMovies, 
   fetchNowPlaying, 
   fetchTopRated, 
-  fetchUpcoming 
+  fetchUpcoming,
+  fetchGenres
 } from '../utils/api';
 import { isInWishlist, toggleWishlist } from '../utils/storage';
 import '../styles/Home.css';
@@ -16,6 +17,7 @@ function Home() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState([]);
   const [toast, setToast] = useState({ show: false, message: '' });
@@ -30,12 +32,13 @@ function Home() {
     try {
       setLoading(true);
 
-      // 4개의 API를 병렬로 호출
-      const [popularRes, nowPlayingRes, topRatedRes, upcomingRes] = await Promise.all([
+      // 5개의 API를 병렬로 호출 (4개 영화 API + 1개 장르 API)
+      const [popularRes, nowPlayingRes, topRatedRes, upcomingRes, genresRes] = await Promise.all([
         fetchPopularMovies(1),
         fetchNowPlaying(1),
         fetchTopRated(1),
-        fetchUpcoming(1)
+        fetchUpcoming(1),
+        fetchGenres()
       ]);
 
       // 성공 시 데이터 설정
@@ -43,6 +46,7 @@ function Home() {
       if (nowPlayingRes.success) setNowPlayingMovies(nowPlayingRes.data);
       if (topRatedRes.success) setTopRatedMovies(topRatedRes.data);
       if (upcomingRes.success) setUpcomingMovies(upcomingRes.data);
+      if (genresRes.success) setGenres(genresRes.data);
 
     } catch (error) {
       console.error('영화 데이터 로드 실패:', error);
@@ -97,6 +101,7 @@ function Home() {
       <MovieSection 
         title="🔥 인기 영화"
         movies={popularMovies}
+        genres={genres}
         onToggleWish={handleToggleWish}
       />
 
@@ -104,6 +109,7 @@ function Home() {
       <MovieSection 
         title="🎥 현재 상영 중"
         movies={nowPlayingMovies}
+        genres={genres}
         onToggleWish={handleToggleWish}
       />
 
@@ -111,6 +117,7 @@ function Home() {
       <MovieSection 
         title="⭐ 최고 평점"
         movies={topRatedMovies}
+        genres={genres}
         onToggleWish={handleToggleWish}
       />
 
@@ -118,6 +125,7 @@ function Home() {
       <MovieSection 
         title="📅 개봉 예정"
         movies={upcomingMovies}
+        genres={genres}
         onToggleWish={handleToggleWish}
       />
     </div>
@@ -125,7 +133,7 @@ function Home() {
 }
 
 // 영화 섹션 컴포넌트
-function MovieSection({ title, movies, onToggleWish }) {
+function MovieSection({ title, movies, genres, onToggleWish }) {
   if (!movies || movies.length === 0) {
     return null;
   }
@@ -138,6 +146,7 @@ function MovieSection({ title, movies, onToggleWish }) {
           <MovieCard
             key={movie.id}
             movie={movie}
+            genres={genres}
             isWished={isInWishlist(movie.id)}
             onToggleWish={onToggleWish}
           />
