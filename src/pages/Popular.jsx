@@ -1,22 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MovieCard from '../components/MovieCard';
 import Loading from '../components/Loading';
 import { fetchPopularMovies } from '../utils/api';
-import { isInWishlist, toggleWishlist } from '../utils/storage';
+import { useToast } from '../hooks/useToast';
+import { useWishlist } from '../hooks/useWishlist';
 import '../styles/Popular.css';
 
 function Popular() {
+  // Custom Hook 사용
+  const { toast, showToast } = useToast(2000);
+  const { isWished, handleToggleWish: toggleWish } = useWishlist();
+
+  // useRef를 사용한 스크롤 위치 저장
+  const scrollPositionRef = useRef(0);
+
   // 상태 관리
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 페이지 로드 시 영화 데이터 가져오기
   useEffect(() => {
     loadMovies(1);
   }, []);
+
+  // 페이지 변경 전 스크롤 위치 저장
+  useEffect(() => {
+    scrollPositionRef.current = window.scrollY;
+  }, [currentPage]);
+
+  // 영화 데이터 로드 후 스크롤 위치 복원
+  useEffect(() => {
+    if (movies.length > 0 && !loading) {
+      setTimeout(() => {
+        window.scrollTo({ top: scrollPositionRef.current, behavior: 'smooth' });
+      }, 100);
+    }
+  }, [movies, loading]);
 
   // 영화 데이터 로드 함수
   const loadMovies = async (page) => {
@@ -28,9 +49,6 @@ function Popular() {
         setMovies(result.data);
         setCurrentPage(page);
         setTotalPages(result.totalPages);
-        
-        // 페이지 변경 시 스크롤을 최상단으로 이동
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         showToast('영화 데이터를 불러오는데 실패했습니다.');
       }
@@ -44,16 +62,8 @@ function Popular() {
 
   // 찜하기 토글
   const handleToggleWish = (movie) => {
-    const result = toggleWishlist(movie);
+    const result = toggleWish(movie);
     showToast(result.message);
-  };
-
-  // 토스트 메시지 표시
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 2000);
   };
 
   // 이전 페이지로 이동
@@ -159,7 +169,7 @@ function Popular() {
               <MovieCard
                 key={movie.id}
                 movie={movie}
-                isWished={isInWishlist(movie.id)}
+                isWished={isWished(movie.id)}
                 onToggleWish={handleToggleWish}
               />
             ))}
