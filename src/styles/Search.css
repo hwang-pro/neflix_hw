@@ -599,6 +599,24 @@
     font-size: 0.85rem;
     padding: 12px 16px;
   }
+
+  .filter-options {
+    padding: 20px;
+  }
+
+  .filter-title {
+    font-size: 1.1rem;
+  }
+
+  .filter-item label {
+    font-size: 0.9rem;
+  }
+
+  .sort-select,
+  .year-input {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
 }
 
 /* 작은 모바일 (480px 이하) */
