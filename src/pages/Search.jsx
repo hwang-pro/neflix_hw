@@ -335,6 +335,7 @@ function Search() {
                     <MovieCard
                       key={movie.id}
                       movie={movie}
+                      genres={genres}
                       isWished={isInWishlist(movie.id)}
                       onToggleWish={handleToggleWish}
                     />
