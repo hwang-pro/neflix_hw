@@ -87,6 +87,7 @@ function Home() {
       <MovieSection 
         title="🔥 인기 영화"
         movies={popularMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -94,6 +95,7 @@ function Home() {
       <MovieSection 
         title="🎥 현재 상영 중"
         movies={nowPlayingMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -101,6 +103,7 @@ function Home() {
       <MovieSection 
         title="⭐ 최고 평점"
         movies={topRatedMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -108,6 +111,7 @@ function Home() {
       <MovieSection 
         title="📅 개봉 예정"
         movies={upcomingMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
     </div>
@@ -115,7 +119,7 @@ function Home() {
 }
 
 // 영화 섹션 컴포넌트
-function MovieSection({ title, movies, onToggleWish }) {
+function MovieSection({ title, movies, isWished, onToggleWish }) {
   if (!movies || movies.length === 0) {
     return null;
   }
