@@ -5,6 +5,28 @@ const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
+// TMDB API 키 검증 함수
+export const validateApiKey = async (apiKey) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/configuration`, {
+      params: {
+        api_key: apiKey
+      }
+    });
+    
+    // API 키가 유효하면 성공
+    if (response.data && response.data.images) {
+      return { success: true, message: 'API 키가 유효합니다.' };
+    }
+    return { success: false, message: 'API 키가 유효하지 않습니다.' };
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      return { success: false, message: 'API 키가 유효하지 않습니다.' };
+    }
+    return { success: false, message: 'API 키 검증 중 오류가 발생했습니다.' };
+  }
+};
+
 // 이미지 URL 생성 헬퍼 함수
 export const getImageUrl = (path) => {
   if (!path) return null;

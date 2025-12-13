@@ -1,5 +1,6 @@
 // 인증 관련 유틸리티 함수
 import { getUsers, login } from './storage';
+import { validateApiKey } from './api';
 
 // 이메일 형식 검증
 export const validateEmail = (email) => {
@@ -44,7 +45,7 @@ export const validatePasswordConfirm = (password, confirmPassword) => {
 };
 
 // 로그인 시도
-export const tryLogin = (email, password) => {
+export const tryLogin = async (email, password) => {
   // 이메일 검증
   const emailValidation = validateEmail(email);
   if (!emailValidation.isValid) {
@@ -70,13 +71,19 @@ export const tryLogin = (email, password) => {
     return { success: false, message: '비밀번호가 일치하지 않습니다.' };
   }
   
+  // TMDB API 키로 실제 API 호출하여 검증
+  const apiValidation = await validateApiKey(password);
+  if (!apiValidation.success) {
+    return { success: false, message: 'TMDB API 키가 유효하지 않습니다.' };
+  }
+  
   // 로그인 성공
   login(email);
   return { success: true, message: '로그인에 성공했습니다!' };
 };
 
 // 회원가입 시도
-export const tryRegister = (email, password, confirmPassword) => {
+export const tryRegister = async (email, password, confirmPassword) => {
   // 이메일 검증
   const emailValidation = validateEmail(email);
   if (!emailValidation.isValid) {
@@ -101,6 +108,12 @@ export const tryRegister = (email, password, confirmPassword) => {
   
   if (existingUser) {
     return { success: false, message: '이미 존재하는 이메일입니다.' };
+  }
+  
+  // TMDB API 키로 실제 API 호출하여 검증
+  const apiValidation = await validateApiKey(password);
+  if (!apiValidation.success) {
+    return { success: false, message: 'TMDB API 키가 유효하지 않습니다. 올바른 API 키를 입력해주세요.' };
   }
   
   // 회원가입 성공 (실제 저장은 SignIn 컴포넌트에서 처리)

@@ -25,6 +25,17 @@ function SignIn() {
       navigate('/');
     }
   }, [navigate]);
+
+  // Remember Me: 저장된 이메일 불러오기
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    const rememberMeStatus = localStorage.getItem('rememberMe');
+    
+    if (rememberedEmail && rememberMeStatus === 'true') {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
   
   // 이메일 실시간 유효성 검증
   const handleEmailChange = (e) => {
@@ -59,17 +70,21 @@ function SignIn() {
   };
   
   // 로그인 처리
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    const result = tryLogin(email, password);
+    const result = await tryLogin(email, password);
     
     if (result.success) {
       showToast(result.message, 'success');
       
-      // Remember Me 체크 시 이메일 저장
+      // Remember Me 체크 시 이메일 저장 및 자동 로그인 설정
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberMe', 'true');
+      } else {
+        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem('rememberMe');
       }
       
       // 1초 후 홈으로 이동
@@ -82,7 +97,7 @@ function SignIn() {
   };
   
   // 회원가입 처리
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     
     // 약관 동의 확인
@@ -91,7 +106,7 @@ function SignIn() {
       return;
     }
     
-    const result = tryRegister(email, password, confirmPassword);
+    const result = await tryRegister(email, password, confirmPassword);
     
     if (result.success) {
       // 실제로 사용자 저장
@@ -100,7 +115,7 @@ function SignIn() {
       if (saveResult.success) {
         showToast('회원가입이 완료되었습니다! 로그인해주세요.', 'success');
         
-        // 1초 후 로그인 모드로 전환
+        // 1.5초 후 로그인 모드로 전환
         setTimeout(() => {
           setIsLogin(true);
           setPassword('');
