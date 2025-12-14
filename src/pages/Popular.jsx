@@ -22,9 +22,9 @@ function Popular() {
   // 상태 관리
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [showTopButton, setShowTopButton] = useState(false);
 
   // 페이지 로드 시 영화 데이터 가져오기
@@ -49,10 +49,10 @@ function Popular() {
     if (currentPage < totalPages && !loadingRef.current) {
       loadingRef.current = true;
       setLoadingMore(true);
-      
+
       try {
         const result = await fetchPopularMovies(currentPage + 1);
-        
+
         if (result.success) {
           setMovies(prev => [...prev, ...result.data]);
           setCurrentPage(prev => prev + 1);
@@ -237,7 +237,7 @@ function Popular() {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`popular-container ${viewMode === 'table' ? 'table-view' : 'infinite-view'}`}
     >
@@ -257,7 +257,7 @@ function Popular() {
               지금 가장 인기있는 영화들을 만나보세요
             </p>
           </div>
-          
+
           {/* View 모드 선택 버튼 */}
           <div className="view-mode-selector">
             <button
