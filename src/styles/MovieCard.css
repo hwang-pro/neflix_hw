@@ -183,6 +183,32 @@
 .movie-year {
   color: #fff;
   font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* 영화 설명 (overview) - 필수 */
+.movie-overview {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 영화 장르 (Optional) */
+.movie-genres {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  margin-top: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* 반응형 디자인 */

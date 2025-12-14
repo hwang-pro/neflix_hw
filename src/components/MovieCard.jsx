@@ -1,9 +1,23 @@
 import { getImageUrl } from '../utils/api';
 import '../styles/MovieCard.css';
 
-function MovieCard({ movie, isWished, onToggleWish }) {
+function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
   // 영화 데이터 검증
   if (!movie) return null;
+
+  // 장르 이름 가져오기
+  const getGenreNames = (genreIds) => {
+    if (!genreIds || !Array.isArray(genreIds) || genreIds.length === 0) return [];
+    if (!genres || genres.length === 0) return [];
+    
+    return genreIds
+      .map(id => genres.find(g => g.id === id))
+      .filter(Boolean)
+      .map(g => g.name)
+      .slice(0, 2); // 최대 2개만 표시
+  };
+
+  const genreNames = getGenreNames(movie.genre_ids);
 
   const handleCardClick = (e) => {
     // 하트 아이콘 클릭 시에는 카드 클릭 무시
@@ -55,13 +69,37 @@ function MovieCard({ movie, isWished, onToggleWish }) {
         <div className="movie-overlay">
           <div className="movie-info">
             <h3 className="movie-title">{movie.title}</h3>
+            
+            {/* 영화 설명 (overview) - 필수 */}
             {movie.overview && (
-              <p className="movie-overview">
-                {movie.overview.length > 80
-                  ? `${movie.overview.substring(0, 80)}...`
+              <div className="movie-overview">
+                {movie.overview.length > 100 
+                  ? `${movie.overview.substring(0, 100)}...` 
                   : movie.overview}
-              </p>
+              </div>
             )}
+            
+            {/* 영화 평점 (Optional) */}
+            {movie.vote_average && (
+              <div className="movie-rating">
+                ⭐ {movie.vote_average.toFixed(1)}
+              </div>
+            )}
+            
+            {/* 영화 개봉일 (Optional) */}
+            {movie.release_date && (
+              <div className="movie-year">
+                📅 {new Date(movie.release_date).getFullYear()}
+              </div>
+            )}
+            
+            {/* 영화 장르 (Optional) */}
+            {genreNames.length > 0 && (
+              <div className="movie-genres">
+                🎭 {genreNames.join(', ')}
+              </div>
+            )}
+            
             <div className="movie-meta">
               {movie.vote_average > 0 && (
                 <span className="movie-rating">
