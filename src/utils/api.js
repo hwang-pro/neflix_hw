@@ -13,7 +13,7 @@ export const validateApiKey = async (apiKey) => {
         api_key: apiKey
       }
     });
-    
+
     // API 키가 유효하면 성공
     if (response.data && response.data.images) {
       return { success: true, message: 'API 키가 유효합니다.' };
@@ -152,15 +152,44 @@ export const fetchMoviesByGenre = async (genreId, page = 1) => {
   }
 };
 
-// 장르 목록 조회
+// 장르 목록 조회 (Caching Strategy Applied)
 export const fetchGenres = async () => {
   try {
+    const CACHE_KEY = 'tmdb_genres';
+    const CACHE_duration = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      const isExpired = Date.now() - timestamp > CACHE_duration;
+
+      if (!isExpired) {
+        // console.log('Returning cached genres');
+        return { success: true, data };
+      }
+    }
+
+    // Cache expired or missing, fetch fresh data
     const response = await apiClient.get('/genre/movie/list');
+    const genres = response.data.genres;
+
+    // Save to cache
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      data: genres,
+      timestamp: Date.now()
+    }));
+
     return {
       success: true,
-      data: response.data.genres
+      data: genres
     };
   } catch (error) {
+    // If API fails but we have old cache, use it as fallback
+    const cached = localStorage.getItem('tmdb_genres');
+    if (cached) {
+      console.warn('API Failed, using stale cache for genres');
+      return { success: true, data: JSON.parse(cached).data };
+    }
     return handleApiError(error);
   }
 };
@@ -175,7 +204,7 @@ export const searchMovies = async (query, page = 1) => {
         data: []
       };
     }
-    
+
     const response = await apiClient.get('/search/movie', {
       params: {
         query: query.trim(),
@@ -212,22 +241,22 @@ export const fetchFilteredMovies = async (filters = {}, page = 1) => {
       page,
       sort_by: filters.sortBy || 'popularity.desc'
     };
-    
+
     // 장르 필터
     if (filters.genreId) {
       params.with_genres = filters.genreId;
     }
-    
+
     // 평점 필터
     if (filters.minRating) {
       params['vote_average.gte'] = filters.minRating;
     }
-    
+
     // 개봉일 필터
     if (filters.year) {
       params.primary_release_year = filters.year;
     }
-    
+
     const response = await apiClient.get('/discover/movie', { params });
     return {
       success: true,
