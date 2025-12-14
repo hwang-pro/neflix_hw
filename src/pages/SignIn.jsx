@@ -137,107 +137,120 @@ function SignIn() {
         </div>
       )}
 
-      {/* 메인 카드 */}
-      <div className={`signin-card ${isLogin ? 'login-mode' : 'register-mode'}`}>
-        <div className="card-inner">
-          {/* 로고 */}
-          <div className="logo">
-            <h1>NETFLIX</h1>
-          </div>
+      {/* 메인 카드 (3D Flip) */}
+      <div className="flip-container">
+        <div className={`flipper ${!isLogin ? 'flipped' : ''}`}>
 
-          {/* 제목 */}
-          <h2 className="card-title">
-            {isLogin ? '로그인' : '회원가입'}
-          </h2>
+          {/* 앞면: 로그인 */}
+          <div className="front">
+            <div className="signin-card">
+              <div className="card-inner">
+                <div className="logo"><h1>NETFLIX</h1></div>
+                <h2 className="card-title">로그인</h2>
 
-          {/* 애니메이션 래퍼 */}
-          <div key={isLogin ? 'login' : 'register'} className="form-animation-wrapper">
-            {/* 폼 */}
-            <form onSubmit={isLogin ? handleLogin : handleRegister} className="signin-form">
-              {/* 이메일 입력 */}
-              <div className="form-group">
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  placeholder=" "
-                  className={emailError ? 'input-error' : ''}
-                  required
-                />
-                <label htmlFor="email">이메일</label>
-                {emailError && <span className="error-message">{emailError}</span>}
-              </div>
+                <form onSubmit={handleLogin} className="signin-form">
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder=" "
+                      className={emailError ? 'input-error' : ''}
+                      required
+                    />
+                    <label>이메일</label>
+                    {emailError && <span className="error-message">{emailError}</span>}
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder=" "
+                      required
+                    />
+                    <label>비밀번호</label>
+                  </div>
+                  <div className="checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                      />
+                      <span>로그인 상태 유지</span>
+                    </label>
+                  </div>
+                  <button type="submit" className="submit-btn">로그인</button>
+                </form>
 
-              {/* 비밀번호 입력 */}
-              <div className="form-group">
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder=" "
-                  required
-                />
-                <label htmlFor="password">비밀번호</label>
-              </div>
-
-              {/* 비밀번호 확인 (회원가입 시에만) */}
-              {!isLogin && (
-                <div className="form-group">
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder=" "
-                    required
-                  />
-                  <label htmlFor="confirmPassword">비밀번호 확인</label>
+                <div className="toggle-mode">
+                  <p>계정이 없으신가요? <button onClick={toggleMode} className="toggle-btn">회원가입</button></p>
                 </div>
-              )}
-
-              {/* 체크박스 영역 */}
-              <div className="checkbox-group">
-                {isLogin ? (
-                  // 로그인: Remember Me
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <span>로그인 상태 유지</span>
-                  </label>
-                ) : (
-                  // 회원가입: 약관 동의
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={agreeTerms}
-                      onChange={(e) => setAgreeTerms(e.target.checked)}
-                    />
-                    <span>이용약관 및 개인정보처리방침에 동의합니다.</span>
-                  </label>
-                )}
               </div>
-
-              {/* 제출 버튼 */}
-              <button type="submit" className="submit-btn">
-                {isLogin ? '로그인' : '회원가입'}
-              </button>
-            </form>
-
-            {/* 모드 전환 */}
-            <div className="toggle-mode">
-              <p>
-                {isLogin ? '계정이 없으신가요?' : '이미 계정이 있으신가요?'}
-                <button onClick={toggleMode} className="toggle-btn">
-                  {isLogin ? '회원가입' : '로그인'}
-                </button>
-              </p>
             </div>
           </div>
+
+          {/* 뒷면: 회원가입 */}
+          <div className="back">
+            <div className="signin-card">
+              <div className="card-inner">
+                <div className="logo"><h1>NETFLIX</h1></div>
+                <h2 className="card-title">회원가입</h2>
+
+                <form onSubmit={handleRegister} className="signin-form">
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      placeholder=" "
+                      className={emailError ? 'input-error' : ''}
+                      required
+                    />
+                    <label>이메일</label>
+                    {emailError && <span className="error-message">{emailError}</span>}
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder=" "
+                      required
+                    />
+                    <label>비밀번호</label>
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder=" "
+                      required
+                    />
+                    <label>비밀번호 확인</label>
+                  </div>
+                  <div className="checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                      />
+                      <span>이용약관 및 개인정보처리방침에 동의합니다.</span>
+                    </label>
+                  </div>
+                  <button type="submit" className="submit-btn">회원가입</button>
+                </form>
+
+                <div className="toggle-mode">
+                  <p>이미 계정이 있으신가요? <button onClick={toggleMode} className="toggle-btn">로그인</button></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
