@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MovieCard from '../components/MovieCard';
 import Loading from '../components/Loading';
 import { 
@@ -6,10 +6,18 @@ import {
   fetchGenres, 
   fetchMoviesByGenre 
 } from '../utils/api';
-import { isInWishlist, toggleWishlist } from '../utils/storage';
+import { useToast } from '../hooks/useToast';
+import { useWishlist } from '../hooks/useWishlist';
 import '../styles/Search.css';
 
 function Search() {
+  // Custom Hook 사용
+  const { toast, showToast } = useToast(2000);
+  const { isWished, handleToggleWish: toggleWish } = useWishlist();
+
+  // useRef를 사용한 DOM 참조
+  const searchInputRef = useRef(null);
+
   // 상태 관리
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
@@ -17,11 +25,17 @@ function Search() {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 장르 목록 로드
   useEffect(() => {
     loadGenres();
+  }, []);
+
+  // 페이지 로드 시 검색 입력 필드에 자동 포커스
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
   }, []);
 
   // 장르 목록 가져오기
@@ -100,16 +114,8 @@ function Search() {
 
   // 찜하기 토글
   const handleToggleWish = (movie) => {
-    const result = toggleWishlist(movie);
+    const result = toggleWish(movie);
     showToast(result.message);
-  };
-
-  // 토스트 메시지 표시
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 2000);
   };
 
   // 검색 초기화
@@ -139,6 +145,7 @@ function Search() {
       <form onSubmit={handleSearch} className="search-form">
         <div className="search-input-wrapper">
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -202,7 +209,7 @@ function Search() {
                     <MovieCard
                       key={movie.id}
                       movie={movie}
-                      isWished={isInWishlist(movie.id)}
+                      isWished={isWished(movie.id)}
                       onToggleWish={handleToggleWish}
                     />
                   ))}
