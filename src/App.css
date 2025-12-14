@@ -28,14 +28,9 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+to {
+  transform: rotate(360deg);
+}
 }
 
 /* 페이지 전환 애니메이션 */
@@ -51,6 +46,8 @@
 }
 
 .fade-in {
+  /* 성능 최적화: will-change */
+  will-change: opacity, transform;
   animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -63,5 +60,18 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* 성능 최적화: prefers-reduced-motion 지원 */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
