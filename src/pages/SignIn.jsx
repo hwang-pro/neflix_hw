@@ -59,10 +59,11 @@ function SignIn() {
   };
 
   // 로그인 처리
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const result = tryLogin(email, password);
+    // 비동기 함수이므로 await 필요
+    const result = await tryLogin(email, password);
 
     if (result.success) {
       showToast(result.message, 'success');
@@ -82,7 +83,7 @@ function SignIn() {
   };
 
   // 회원가입 처리
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // 약관 동의 확인
@@ -91,7 +92,7 @@ function SignIn() {
       return;
     }
 
-    const result = tryRegister(email, password, confirmPassword);
+    const result = await tryRegister(email, password, confirmPassword);
 
     if (result.success) {
       // 실제로 사용자 저장
