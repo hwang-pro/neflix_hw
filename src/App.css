@@ -32,7 +32,36 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* 페이지 전환 애니메이션 */
+.page-transition-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page-content {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

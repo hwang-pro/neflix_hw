@@ -817,3 +817,90 @@
     right: 20px;
   }
 }
+
+/* 최근 검색어 스타일 */
+.recent-searches {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  text-align: left;
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 0 10px;
+}
+
+.recent-header h3 {
+  font-size: 1.1rem;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.clear-history-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.clear-history-btn:hover {
+  color: #fff;
+}
+
+.recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  background: #333;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.recent-item:hover {
+  background: #444;
+  transform: translateY(-2px);
+}
+
+.recent-keyword {
+  color: #fff;
+  font-size: 0.95rem;
+  margin-right: 8px;
+}
+
+.remove-recent-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+.remove-recent-btn:hover {
+  color: #fff;
+  background: #666;
+}
+
+.search-placeholder-content {
+  margin-top: 40px;
+}
