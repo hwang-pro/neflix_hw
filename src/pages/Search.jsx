@@ -6,6 +6,12 @@ import {
   fetchGenres,
   fetchFilteredMovies
 } from '../utils/api';
+import {
+  getSearchHistory,
+  saveSearchHistory,
+  clearSearchHistory,
+  removeSearchHistoryItem
+} from '../utils/storage';
 import { useToast } from '../hooks/useToast';
 import { useWishlist } from '../hooks/useWishlist';
 import '../styles/Search.css';
@@ -118,6 +124,9 @@ function Search() {
       const result = await searchMovies(searchQuery, 1);
 
       if (result.success) {
+        // 검색어 저장
+        saveSearchHistory(searchQuery);
+
         setMovies(result.data);
         setTotalPages(result.totalPages || 1);
         setHasMore(1 < (result.totalPages || 1));
@@ -532,12 +541,22 @@ function Search() {
             </div>
           )}
 
-          {/* 초기 상태 */}
+          {/* 초기 상태 및 최근 검색어 */}
           {!hasSearched && (
             <div className="empty-state">
-              <div className="empty-icon"></div>
-              <h3>어떤 콘텐츠를 찾고 계신가요?</h3>
-              <p>영화 제목, 인물, 장르를 검색해보세요</p>
+              {/* 최근 검색어 섹션 */}
+              <RecentSearches
+                onSearch={(keyword) => {
+                  setSearchQuery(keyword);
+                  handleSearch({ preventDefault: () => { } }, keyword);
+                }}
+              />
+
+              <div className="search-placeholder-content">
+                <div className="empty-icon"></div>
+                <h3>어떤 콘텐츠를 찾고 계신가요?</h3>
+                <p>영화 제목, 인물, 장르를 검색해보세요</p>
+              </div>
             </div>
           )}
         </>
@@ -555,3 +574,51 @@ function Search() {
 }
 
 export default Search;
+
+// 최근 검색어 컴포넌트
+function RecentSearches({ onSearch }) {
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    setHistory(getSearchHistory());
+  }, []);
+
+  const handleClear = () => {
+    clearSearchHistory();
+    setHistory([]);
+  };
+
+  const handleRemove = (e, keyword) => {
+    e.stopPropagation();
+    const newHistory = removeSearchHistoryItem(keyword);
+    setHistory(newHistory);
+  };
+
+  if (history.length === 0) return null;
+
+  return (
+    <div className="recent-searches">
+      <div className="recent-header">
+        <h3>최근 검색어</h3>
+        <button onClick={handleClear} className="clear-history-btn">주기</button>
+      </div>
+      <div className="recent-list">
+        {history.map((keyword, index) => (
+          <div
+            key={`${keyword}-${index}`}
+            className="recent-item"
+            onClick={() => onSearch(keyword)}
+          >
+            <span className="recent-keyword">{keyword}</span>
+            <button
+              className="remove-recent-btn"
+              onClick={(e) => handleRemove(e, keyword)}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
