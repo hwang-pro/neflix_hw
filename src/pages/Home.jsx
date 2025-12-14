@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import MovieCard from '../components/MovieCard';
 import Loading from '../components/Loading';
-import { 
-  fetchPopularMovies, 
-  fetchNowPlaying, 
-  fetchTopRated, 
-  fetchUpcoming 
+import {
+  fetchPopularMovies,
+  fetchNowPlaying,
+  fetchTopRated,
+  fetchUpcoming
 } from '../utils/api';
 import { useToast } from '../hooks/useToast';
 import { useWishlist } from '../hooks/useWishlist';
@@ -60,6 +60,8 @@ function Home() {
     const result = toggleWish(movie);
     showToast(result.message);
   };
+  // 랜덤한 추천 영화 선택
+  const featuredMovie = popularMovies[0];
 
   // 로딩 중
   if (loading) {
@@ -76,39 +78,73 @@ function Home() {
       )}
 
       {/* 히어로 섹션 */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1 className="hero-title">🎬 영화의 모든 것</h1>
-          <p className="hero-subtitle">Netflix Clone에서 최신 영화를 만나보세요</p>
+      {featuredMovie && (
+        <section
+          className="hero-section"
+          style={{
+            backgroundImage: `linear-gradient(to top, #141414, transparent 50%),
+                            linear-gradient(to right, #141414 0%, transparent 50%),
+                            url(https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path})`
+          }}
+        >
+          <div className="hero-content">
+            <h1 className="hero-title">{featuredMovie.title}</h1>
+            <p className="hero-overview">{featuredMovie.overview?.slice(0, 150)}...</p>
+            <div className="hero-buttons">
+              <button className="play-btn">
+                <span className="icon">▶</span> 재생
+              </button>
+              <button className="info-btn">
+                <span className="icon">ⓘ</span> 상세 정보
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 섹션 1: 오늘의 TOP 10 */}
+      <section className="movie-section top-10-section">
+        <h2 className="section-title">오늘 대한민국의 TOP 10 시리즈</h2>
+        <div className="movie-list top-10-list">
+          {popularMovies.slice(0, 10).map((movie, index) => (
+            <div key={movie.id} className="top-10-item">
+              <span className="rank-number">{index + 1}</span>
+              <MovieCard
+                movie={movie}
+                isWished={isWished(movie.id)}
+                onToggleWish={handleToggleWish}
+              />
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 섹션 1: 인기 영화 */}
-      <MovieSection 
+      {/* 섹션 2: 인기 영화 */}
+      <MovieSection
         title="🔥 인기 영화"
         movies={popularMovies}
         isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
-      {/* 섹션 2: 현재 상영 중 */}
-      <MovieSection 
+      {/* 섹션 3: 현재 상영 중 */}
+      <MovieSection
         title="🎥 현재 상영 중"
         movies={nowPlayingMovies}
         isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
-      {/* 섹션 3: 최고 평점 */}
-      <MovieSection 
+      {/* 섹션 4: 최고 평점 */}
+      <MovieSection
         title="⭐ 최고 평점"
         movies={topRatedMovies}
         isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
-      {/* 섹션 4: 개봉 예정 */}
-      <MovieSection 
+      {/* 섹션 5: 개봉 예정 */}
+      <MovieSection
         title="📅 개봉 예정"
         movies={upcomingMovies}
         isWished={isWished}
