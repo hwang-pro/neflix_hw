@@ -99,19 +99,6 @@ function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
                 🎭 {genreNames.join(', ')}
               </div>
             )}
-            
-            <div className="movie-meta">
-              {movie.vote_average > 0 && (
-                <span className="movie-rating">
-                  ⭐ {movie.vote_average.toFixed(1)}
-                </span>
-              )}
-              {movie.release_date && (
-                <span className="movie-year">
-                  {new Date(movie.release_date).getFullYear()}
-                </span>
-              )}
-            </div>
           </div>
         </div>
       </div>
