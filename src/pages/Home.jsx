@@ -60,6 +60,9 @@ function Home() {
     const result = toggleWish(movie);
     showToast(result.message);
   };
+  // 랜덤한 추천 영화 선택
+  const featuredMovie = popularMovies[0];
+
   // 로딩 중
   if (loading) {
     return <Loading />;
