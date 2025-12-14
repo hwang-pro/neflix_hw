@@ -10,6 +10,11 @@
   /* Fallback dark background if image fails */
   background-size: cover;
   background-position: center;
+  /* Add gap for side-by-side layout and wrap for mobile */
+  gap: 60px;
+  flex-wrap: wrap;
+  padding: 20px;
+  /* Prevent edge touching on small screens */
 }
 
 /* Background Overlay */
@@ -214,19 +219,41 @@
 }
 
 .demo-info {
-  margin-top: 50px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-  color: #8c8c8c;
-  font-size: 0.8rem;
+  /* Side by side layout adjustments */
+  margin-top: 0;
+  /* Remove top spacing */
+  padding-top: 0;
+  border-top: none;
+  color: #ffffff;
+  font-size: 0.9rem;
   text-align: left;
+  max-width: 300px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 4px;
 }
 
 .demo-info code {
-  color: white;
+  color: #e50914;
+  /* Highlight API notes */
+  font-weight: bold;
 }
 
 /* 반응형 */
+@media (max-width: 900px) {
+  .signin-container {
+    flex-direction: column;
+    /* Stack vertically on tablet/mobile */
+    gap: 30px;
+  }
+
+  .demo-info {
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
 @media (max-width: 740px) {
   .signin-container {
     background: black;
@@ -243,21 +270,69 @@
   .signin-container::before {
     display: none;
   }
+
+  .demo-info {
+    display: none;
+    /* Optional: Hide demo info on very small screens to focus on login */
+  }
 }
 
-/* 폼 전환 애니메이션 */
-.form-animation-wrapper {
-  animation: slideFadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+/* 3D Flip Animation */
+.flip-container {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 450px;
+  min-height: 580px;
+  position: relative;
+  z-index: 10;
+  /* margin: 0 auto; REMOVED to allow side-by-side */
 }
 
-@keyframes slideFadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
+.flipper {
+  transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.flipper.flipped {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+/* Override existing card values for 3D context */
+.signin-card {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  min-height: 580px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.card-title {
+  margin-bottom: 20px;
 }
