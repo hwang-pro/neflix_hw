@@ -191,13 +191,22 @@
     font-size: 0.9rem;
   }
 
+  /* 터치 디바이스: 찜하기 버튼 항상 표시 */
   .wishlist-btn {
-    width: 35px;
-    height: 35px;
+    width: 38px; /* 터치 영역 확대 */
+    height: 38px;
+    opacity: 1; /* 항상 보이게 */
+    transform: scale(1);
   }
 
   .heart-icon {
     font-size: 18px;
+  }
+
+  /* 터치 디바이스: 오버레이 항상 표시 */
+  .movie-overlay {
+    opacity: 0.9;
+    transform: translateY(0);
   }
 }
 

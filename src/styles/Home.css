@@ -291,7 +291,8 @@
   }
 
   .hero-section {
-    height: 300px;
+    height: 350px; /* 태블릿 최적화 */
+    padding-top: 70px;
   }
 
   .hero-title {
@@ -325,15 +326,18 @@
   }
 
   .hero-section {
-    height: 250px;
+    height: 300px; /* 모바일 최적화 */
+    padding-top: 60px;
   }
 
   .hero-title {
     font-size: 2rem;
+    line-height: 1.2; /* 줄간격 최적화 */
   }
 
   .hero-subtitle {
     font-size: 1rem;
+    line-height: 1.5; /* 가독성 향상 */
   }
 
   .movie-section {

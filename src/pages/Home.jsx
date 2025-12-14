@@ -7,18 +7,21 @@ import {
   fetchTopRated,
   fetchUpcoming
 } from '../utils/api';
-import { isInWishlist, toggleWishlist } from '../utils/storage';
+import { useToast } from '../hooks/useToast';
+import { useWishlist } from '../hooks/useWishlist';
 import '../styles/Home.css';
 
 function Home() {
+  // Custom Hook 사용
+  const { toast, showToast } = useToast(2000);
+  const { isWished, handleToggleWish: toggleWish } = useWishlist();
+
   // 상태 관리
   const [popularMovies, setPopularMovies] = useState([]);
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [wishlist, setWishlist] = useState([]);
-  const [toast, setToast] = useState({ show: false, message: '' });
 
   // 영화 데이터 로드
   useEffect(() => {
@@ -54,26 +57,9 @@ function Home() {
 
   // 찜하기 토글
   const handleToggleWish = (movie) => {
-    const result = toggleWishlist(movie);
-    setWishlist(prev =>
-      result.isWished
-        ? [...prev, movie.id]
-        : prev.filter(id => id !== movie.id)
-    );
+    const result = toggleWish(movie);
     showToast(result.message);
   };
-
-  // 토스트 메시지 표시
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 2000);
-  };
-
-  // 랜덤한 추천 영화 선택
-  const featuredMovie = popularMovies[0];
-
   // 로딩 중
   if (loading) {
     return <Loading />;
@@ -122,7 +108,7 @@ function Home() {
               <span className="rank-number">{index + 1}</span>
               <MovieCard
                 movie={movie}
-                isWished={isInWishlist(movie.id)}
+                isWished={isWished(movie.id)}
                 onToggleWish={handleToggleWish}
               />
             </div>
@@ -134,6 +120,7 @@ function Home() {
       <MovieSection
         title="🔥 인기 영화"
         movies={popularMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -141,6 +128,7 @@ function Home() {
       <MovieSection
         title="🎥 현재 상영 중"
         movies={nowPlayingMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -148,6 +136,7 @@ function Home() {
       <MovieSection
         title="⭐ 최고 평점"
         movies={topRatedMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
 
@@ -155,6 +144,7 @@ function Home() {
       <MovieSection
         title="📅 개봉 예정"
         movies={upcomingMovies}
+        isWished={isWished}
         onToggleWish={handleToggleWish}
       />
     </div>
@@ -162,7 +152,7 @@ function Home() {
 }
 
 // 영화 섹션 컴포넌트
-function MovieSection({ title, movies, onToggleWish }) {
+function MovieSection({ title, movies, isWished, onToggleWish }) {
   if (!movies || movies.length === 0) {
     return null;
   }
@@ -175,7 +165,7 @@ function MovieSection({ title, movies, onToggleWish }) {
           <MovieCard
             key={movie.id}
             movie={movie}
-            isWished={isInWishlist(movie.id)}
+            isWished={isWished(movie.id)}
             onToggleWish={onToggleWish}
           />
         ))}
