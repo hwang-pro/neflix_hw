@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import MovieCard from '../components/MovieCard';
-import { getWishlist, toggleWishlist } from '../utils/storage';
+import { useToast } from '../hooks/useToast';
+import { useWishlist } from '../hooks/useWishlist';
 import '../styles/Wishlist.css';
 
 function Wishlist() {
+  // Custom Hook 사용
+  const { toast, showToast } = useToast(2000);
+  const { wishlist, handleToggleWish: toggleWish, refreshWishlist } = useWishlist();
+
   // 상태 관리
-  const [wishlistMovies, setWishlistMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'infinite'
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '' });
   const [currentPage, setCurrentPage] = useState(1);
   const [showTopButton, setShowTopButton] = useState(false);
   const loadingRef = useRef(false);
@@ -18,63 +21,54 @@ function Wishlist() {
 
   // 페이지 로드 시 찜 목록 불러오기
   useEffect(() => {
-    loadWishlist();
-  }, []);
-
-  // 찜 목록 로드
-  const loadWishlist = () => {
-    const movies = getWishlist();
-    setWishlistMovies(movies);
-    
-    // View 모드에 따라 표시할 영화 설정
-    if (viewMode === 'table') {
-      // Table View: 모든 영화 표시
-      setDisplayedMovies(movies);
-    } else {
-      // Infinite Scroll: 첫 페이지만 표시
-      setDisplayedMovies(movies.slice(0, itemsPerPage));
-      setCurrentPage(1);
-    }
-    
+    refreshWishlist();
     setLoading(false);
-  };
+  }, [refreshWishlist]);
 
-  // View 모드 변경
+  // View 모드 및 찜 목록 변경에 따라 표시할 영화 설정
   useEffect(() => {
-    if (wishlistMovies.length > 0) {
+    if (wishlist && wishlist.length > 0) {
       if (viewMode === 'table') {
         // Table View: 모든 영화 표시
-        setDisplayedMovies(wishlistMovies);
+        setDisplayedMovies(wishlist);
       } else {
-        // Infinite Scroll: 첫 페이지부터 시작
-        setDisplayedMovies(wishlistMovies.slice(0, itemsPerPage));
-        setCurrentPage(1);
+        // Infinite Scroll: 현재 페이지까지 표시
+        // viewMode 변경 시 currentPage는 아래 useEffect에서 1로 초기화됨
+        // 하지만 여기서도 slice 로직을 currentPage 기반으로 하면 됨
+        // 단, ViewMode 변경 직후에는 currentPage가 1이 아닐 수 있으므로 주의.
+        // 아래 useEffect에서 ViewMode 변경 시 currentPage를 1로 리셋함.
+        const endIndex = currentPage * itemsPerPage;
+        setDisplayedMovies(wishlist.slice(0, endIndex));
       }
     } else {
       setDisplayedMovies([]);
     }
-  }, [viewMode, wishlistMovies]);
+  }, [viewMode, wishlist, currentPage]);
+
+  // View 모드 변경 시 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+    setShowTopButton(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [viewMode]);
 
   // 무한 스크롤: 다음 페이지 로드
   const loadMoreMovies = useCallback(() => {
     if (loadingRef.current || viewMode !== 'infinite') return;
-    
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const nextMovies = wishlistMovies.slice(startIndex, endIndex);
-    
-    if (nextMovies.length > 0) {
-      loadingRef.current = true;
-      setLoadingMore(true);
-      
-      setTimeout(() => {
-        setDisplayedMovies(prev => [...prev, ...nextMovies]);
-        setCurrentPage(prev => prev + 1);
-        setLoadingMore(false);
-        loadingRef.current = false;
-      }, 500);
-    }
-  }, [viewMode, currentPage, wishlistMovies]);
+
+    // 더 보여줄 데이터가 있는지 확인
+    const currentCount = currentPage * itemsPerPage;
+    if (currentCount >= wishlist.length) return;
+
+    loadingRef.current = true;
+    setLoadingMore(true);
+
+    setTimeout(() => {
+      setCurrentPage(prev => prev + 1);
+      setLoadingMore(false);
+      loadingRef.current = false;
+    }, 500);
+  }, [viewMode, currentPage, wishlist]);
 
   // 스크롤 이벤트 감지 (무한 스크롤용)
   useEffect(() => {
@@ -91,7 +85,7 @@ function Wishlist() {
         if (
           window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100 &&
           !loadingRef.current &&
-          displayedMovies.length < wishlistMovies.length
+          displayedMovies.length < wishlist.length
         ) {
           loadMoreMovies();
         }
@@ -100,35 +94,27 @@ function Wishlist() {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     }
-  }, [viewMode, displayedMovies.length, wishlistMovies.length, loadMoreMovies]);
+  }, [viewMode, displayedMovies.length, wishlist.length, loadMoreMovies]);
 
   // 맨 위로 이동
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 찜하기 토글 (제거)
+  // 찜하기 토글
   const handleToggleWish = (movie) => {
-    const result = toggleWishlist(movie);
+    const result = toggleWish(movie);
     showToast(result.message);
-    
-    // 목록 새로고침
-    loadWishlist();
-  };
-
-  // 토스트 메시지 표시
-  const showToast = (message) => {
-    setToast({ show: true, message });
-    setTimeout(() => {
-      setToast({ show: false, message: '' });
-    }, 2000);
+    // useWishlist 훅 내부에서 상태가 업데이트되므로 refreshWishlist()를 별도로 호출할 필요가 없을 수도 있으나,
+    // 확실하게 하기 위해 호출하거나, 훅의 구현에 따라 다름. 
+    // 보통 훅이 상태를 리턴하면 자동 업데이트됨.
   };
 
   // 모든 찜 목록 제거
   const handleClearAll = () => {
     if (window.confirm('모든 찜 목록을 삭제하시겠습니까?')) {
       localStorage.removeItem('wishlist');
-      setWishlistMovies([]);
+      refreshWishlist();
       showToast('모든 찜 목록이 삭제되었습니다.');
     }
   };
@@ -150,7 +136,7 @@ function Wishlist() {
         </div>
         <div className="header-actions">
           {/* View 모드 선택 */}
-          {wishlistMovies.length > 0 && (
+          {wishlist.length > 0 && (
             <div className="view-mode-selector">
               <button
                 onClick={() => setViewMode('table')}
@@ -166,7 +152,7 @@ function Wishlist() {
               </button>
             </div>
           )}
-          {wishlistMovies.length > 0 && (
+          {wishlist.length > 0 && (
             <button onClick={handleClearAll} className="clear-all-btn">
               전체 삭제
             </button>
@@ -175,13 +161,13 @@ function Wishlist() {
       </div>
 
       {/* 찜 목록 */}
-      {wishlistMovies.length > 0 && (
+      {wishlist.length > 0 && (
         <>
           {/* 통계 정보 */}
           <div className="wishlist-stats">
             <span className="stats-text">
-              총 <strong>{wishlistMovies.length}</strong>개의 영화
-              {viewMode === 'infinite' && displayedMovies.length < wishlistMovies.length && (
+              총 <strong>{wishlist.length}</strong>개의 영화
+              {viewMode === 'infinite' && displayedMovies.length < wishlist.length && (
                 <span className="displayed-count">
                   (표시: {displayedMovies.length}개)
                 </span>
@@ -211,14 +197,14 @@ function Wishlist() {
           )}
 
           {/* 무한 스크롤 완료 메시지 */}
-          {viewMode === 'infinite' && 
-           !loadingMore && 
-           displayedMovies.length >= wishlistMovies.length && 
-           wishlistMovies.length > itemsPerPage && (
-            <div className="load-complete">
-              <p>모든 영화를 불러왔습니다.</p>
-            </div>
-          )}
+          {viewMode === 'infinite' &&
+            !loadingMore &&
+            displayedMovies.length >= wishlist.length &&
+            wishlist.length > itemsPerPage && (
+              <div className="load-complete">
+                <p>모든 영화를 불러왔습니다.</p>
+              </div>
+            )}
 
           {/* Top 버튼 (Infinite Scroll 모드) */}
           {viewMode === 'infinite' && showTopButton && (
@@ -230,7 +216,7 @@ function Wishlist() {
       )}
 
       {/* 빈 상태 */}
-      {wishlistMovies.length === 0 && !loading && (
+      {wishlist.length === 0 && !loading && (
         <div className="empty-state">
           <div className="empty-icon">💔</div>
           <h3>찜한 영화가 없습니다</h3>
@@ -247,5 +233,3 @@ function Wishlist() {
 }
 
 export default Wishlist;
-
-

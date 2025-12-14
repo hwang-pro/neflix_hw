@@ -133,28 +133,38 @@
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+  .loading-container {
+    min-height: 350px; /* 높이 최적화 */
+    padding: 30px 20px;
+  }
+
   .loading-spinner {
-    width: 60px;
-    height: 60px;
+    width: 70px; /* 크기 증가 */
+    height: 70px;
   }
 
   .loading-text {
-    font-size: 1rem;
+    font-size: 1.05rem; /* 폰트 크기 증가 */
   }
 }
 
 @media (max-width: 480px) {
+  .loading-container {
+    min-height: 300px;
+    padding: 25px 15px;
+  }
+
   .loading-spinner {
-    width: 50px;
-    height: 50px;
+    width: 60px; /* 크기 증가 */
+    height: 60px;
   }
 
   .loading-text {
-    font-size: 0.9rem;
+    font-size: 0.95rem; /* 폰트 크기 증가 */
   }
 
   .spinner-ring {
-    border-width: 3px;
+    border-width: 3.5px; /* 선 두께 증가 (가시성 향상) */
   }
 }
 
