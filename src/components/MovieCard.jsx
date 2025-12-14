@@ -55,16 +55,25 @@ function MovieCard({ movie, isWished, onToggleWish }) {
         <div className="movie-overlay">
           <div className="movie-info">
             <h3 className="movie-title">{movie.title}</h3>
-            {movie.vote_average && (
-              <div className="movie-rating">
-                ⭐ {movie.vote_average.toFixed(1)}
-              </div>
+            {movie.overview && (
+              <p className="movie-overview">
+                {movie.overview.length > 80
+                  ? `${movie.overview.substring(0, 80)}...`
+                  : movie.overview}
+              </p>
             )}
-            {movie.release_date && (
-              <div className="movie-year">
-                {new Date(movie.release_date).getFullYear()}
-              </div>
-            )}
+            <div className="movie-meta">
+              {movie.vote_average > 0 && (
+                <span className="movie-rating">
+                  ⭐ {movie.vote_average.toFixed(1)}
+                </span>
+              )}
+              {movie.release_date && (
+                <span className="movie-year">
+                  {new Date(movie.release_date).getFullYear()}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
