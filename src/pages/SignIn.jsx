@@ -6,7 +6,7 @@ import '../styles/SignIn.css';
 
 function SignIn() {
   const navigate = useNavigate();
-  
+
   // 상태 관리
   const [isLogin, setIsLogin] = useState(true); // true: 로그인, false: 회원가입
   const [email, setEmail] = useState('');
@@ -14,23 +14,23 @@ function SignIn() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
-  
+
   // 에러 및 메시지 상태
   const [emailError, setEmailError] = useState('');
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
-  
+
   // 이미 로그인되어 있으면 홈으로 리다이렉트
   useEffect(() => {
     if (isLoggedIn()) {
       navigate('/');
     }
   }, [navigate]);
-  
+
   // 이메일 실시간 유효성 검증
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-    
+
     if (value) {
       const validation = validateEmail(value);
       setEmailError(validation.isValid ? '' : validation.message);
@@ -38,7 +38,7 @@ function SignIn() {
       setEmailError('');
     }
   };
-  
+
   // 로그인/회원가입 전환
   const toggleMode = () => {
     setIsLogin(!isLogin);
@@ -49,7 +49,7 @@ function SignIn() {
     setEmailError('');
     setAgreeTerms(false);
   };
-  
+
   // 토스트 메시지 표시
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
@@ -57,21 +57,26 @@ function SignIn() {
       setToast({ show: false, message: '', type: '' });
     }, 3000);
   };
-  
+
   // 로그인 처리
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const result = tryLogin(email, password);
-    
+
+    // 입력값 공백 제거
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    // 비동기 함수이므로 await 필요
+    const result = await tryLogin(trimmedEmail, trimmedPassword);
+
     if (result.success) {
       showToast(result.message, 'success');
-      
+
       // Remember Me 체크 시 이메일 저장
       if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberedEmail', trimmedEmail);
       }
-      
+
       // 1초 후 홈으로 이동
       setTimeout(() => {
         navigate('/');
@@ -80,26 +85,31 @@ function SignIn() {
       showToast(result.message, 'error');
     }
   };
-  
+
   // 회원가입 처리
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     // 약관 동의 확인
     if (!agreeTerms) {
       showToast('약관에 동의해주세요.', 'error');
       return;
     }
-    
-    const result = tryRegister(email, password, confirmPassword);
-    
+
+    // 입력값 공백 제거
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedConfirm = confirmPassword.trim();
+
+    const result = await tryRegister(trimmedEmail, trimmedPassword, trimmedConfirm);
+
     if (result.success) {
       // 실제로 사용자 저장
-      const saveResult = saveUser(email, password);
-      
+      const saveResult = saveUser(trimmedEmail, trimmedPassword);
+
       if (saveResult.success) {
         showToast('회원가입이 완료되었습니다! 로그인해주세요.', 'success');
-        
+
         // 1초 후 로그인 모드로 전환
         setTimeout(() => {
           setIsLogin(true);
@@ -114,32 +124,32 @@ function SignIn() {
       showToast(result.message, 'error');
     }
   };
-  
+
   return (
     <div className="signin-container">
       {/* 배경 그라데이션 */}
       <div className="signin-background"></div>
-      
+
       {/* 토스트 메시지 */}
       {toast.show && (
         <div className={`toast toast-${toast.type}`}>
           {toast.message}
         </div>
       )}
-      
+
       {/* 메인 카드 */}
       <div className={`signin-card ${isLogin ? 'login-mode' : 'register-mode'}`}>
         <div className="card-inner">
           {/* 로고 */}
           <div className="logo">
-            <h1>🎬 NETFLIX</h1>
+            <h1>NETFLIX</h1>
           </div>
-          
+
           {/* 제목 */}
           <h2 className="card-title">
             {isLogin ? '로그인' : '회원가입'}
           </h2>
-          
+
           {/* 폼 */}
           <form onSubmit={isLogin ? handleLogin : handleRegister} className="signin-form">
             {/* 이메일 입력 */}
@@ -156,7 +166,7 @@ function SignIn() {
               <label htmlFor="email">이메일</label>
               {emailError && <span className="error-message">{emailError}</span>}
             </div>
-            
+
             {/* 비밀번호 입력 */}
             <div className="form-group">
               <input
@@ -169,7 +179,7 @@ function SignIn() {
               />
               <label htmlFor="password">비밀번호</label>
             </div>
-            
+
             {/* 비밀번호 확인 (회원가입 시에만) */}
             {!isLogin && (
               <div className="form-group">
@@ -184,7 +194,7 @@ function SignIn() {
                 <label htmlFor="confirmPassword">비밀번호 확인</label>
               </div>
             )}
-            
+
             {/* 체크박스 영역 */}
             <div className="checkbox-group">
               {isLogin ? (
@@ -209,13 +219,13 @@ function SignIn() {
                 </label>
               )}
             </div>
-            
+
             {/* 제출 버튼 */}
             <button type="submit" className="submit-btn">
               {isLogin ? '로그인' : '회원가입'}
             </button>
           </form>
-          
+
           {/* 모드 전환 */}
           <div className="toggle-mode">
             <p>
@@ -227,7 +237,7 @@ function SignIn() {
           </div>
         </div>
       </div>
-      
+
       {/* 데모 안내 */}
       <div className="demo-info">
         <p>💡 <strong>데모용 안내:</strong></p>
