@@ -2,8 +2,8 @@
 
 .home-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #141414 0%, #000000 100%);
-  padding-top: 80px; /* Header 높이만큼 패딩 */
+  background: #000000;
+  padding-top: 0;
   padding-bottom: 60px;
 }
 
@@ -27,6 +27,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -34,54 +35,192 @@
 }
 
 /* 히어로 섹션 */
+/* 히어로 섹션 */
 .hero-section {
   width: 100%;
-  height: 400px;
-  background: linear-gradient(
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0.8)
-  ), url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1920') center/cover;
+  height: 95vh;
+  /* Taller hero */
+  background-size: cover;
+  background-position: center top;
+  /* Focus on top part of image */
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
   position: relative;
-  overflow: hidden;
+  /* Complex gradient: Bottom fade + Left fade */
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* Gradient overlay on the image itself for text readability */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(77deg, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0) 85%);
+  z-index: 1;
 }
 
 .hero-content {
-  text-align: center;
+  width: 36%;
+  margin-left: 4%;
   color: white;
-  z-index: 2;
-  padding: 0 20px;
+  z-index: 10;
+  padding-top: 100px;
+  /* Push content down slightly */
 }
 
 .hero-title {
   font-size: 4rem;
+  /* Larger title */
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
+  line-height: 1.1;
+  text-transform: uppercase;
+  max-width: 100%;
+  word-break: keep-all;
+}
+
+.hero-overview {
+  font-size: 1.2vw;
+  /* Responsive font size */
+  margin-bottom: 30px;
+  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
+  line-height: 1.5;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-width: 800px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.play-btn,
+.info-btn {
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.play-btn {
+  background-color: white;
+  color: black;
+}
+
+.play-btn:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.info-btn {
+  background-color: rgba(109, 109, 110, 0.7);
+  color: white;
+}
+
+.info-btn:hover {
+  background-color: rgba(109, 109, 110, 0.4);
+}
+
+.icon {
+  font-size: 1.6rem;
+}
+
+/* 오늘의 Top 10 섹션 */
+.top-10-section {
+  position: relative;
+  z-index: 20;
+  margin-top: -150px;
+  /* Pull up to overlap with hero fade */
+  padding-bottom: 20px;
+}
+
+.top-10-list {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  padding: 20px 4%;
+  scroll-behavior: smooth;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 280px;
+  /* Fixed height for consistent alignment */
+}
+
+.top-10-list::-webkit-scrollbar {
+  display: none;
+}
+
+.top-10-item {
+  display: flex;
+  align-items: flex-end;
+  /* Align bottom */
+  position: relative;
+  margin-right: 20px;
+  /* Reduced gap since width is handled by min-width/padding */
+  min-width: 400px;
+  /* Much wider item area */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding-right: 20px;
+  /* Internal spacing */
+}
+
+.rank-number {
+  font-size: 240px;
+  /* Restored large size */
   font-weight: 900;
-  margin: 0 0 20px 0;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
-  animation: fadeInUp 0.8s ease-out;
+  color: #000;
+  /* Black fill */
+  -webkit-text-stroke: 4px #595959;
+  /* Gray stroke */
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 0.7;
+  letter-spacing: -10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  transform: scaleY(1.0);
 }
 
-.hero-subtitle {
-  font-size: 1.5rem;
-  font-weight: 300;
-  margin: 0;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
-  animation: fadeInUp 1s ease-out;
-  opacity: 0.9;
+/* 1번 숫자 위치 조정 */
+.top-10-item:first-child .rank-number {
+  letter-spacing: -20px;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.top-10-item .movie-card {
+  z-index: 2;
+  width: 180px;
+  /* Wider card */
+  height: 260px;
+  /* Taller card */
+  object-fit: cover;
+  margin-left: 130px;
+  /* Adjusted overlap position */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.top-10-item:hover {
+  transform: scale(1.05);
+  z-index: 100;
 }
 
 /* 영화 섹션 */
@@ -108,7 +247,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
-  
+
   /* 스크롤바 스타일 */
   scrollbar-width: thin;
   scrollbar-color: #e50914 #141414;
@@ -152,7 +291,8 @@
   }
 
   .hero-section {
-    height: 300px;
+    height: 350px; /* 태블릿 최적화 */
+    padding-top: 70px;
   }
 
   .hero-title {
@@ -186,15 +326,18 @@
   }
 
   .hero-section {
-    height: 250px;
+    height: 300px; /* 모바일 최적화 */
+    padding-top: 60px;
   }
 
   .hero-title {
     font-size: 2rem;
+    line-height: 1.2; /* 줄간격 최적화 */
   }
 
   .hero-subtitle {
     font-size: 1rem;
+    line-height: 1.5; /* 가독성 향상 */
   }
 
   .movie-section {
@@ -252,4 +395,3 @@
     width: 140px;
   }
 }
-

@@ -7,6 +7,24 @@
   padding-bottom: 80px;
 }
 
+/* Table View: 스크롤 활성화 (Fix applied here) */
+.popular-container.table-view {
+  overflow-y: auto;
+  min-height: 100vh;
+  height: auto;
+  display: block;
+}
+
+.popular-container.table-view .movie-grid {
+  overflow: visible;
+  margin-bottom: 20px;
+}
+
+/* Infinite Scroll View: 스크롤 가능 */
+.popular-container.infinite-view {
+  overflow-y: auto;
+}
+
 /* 토스트 메시지 */
 .toast {
   position: fixed;
@@ -27,6 +45,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -35,9 +54,53 @@
 
 /* 헤더 섹션 */
 .popular-header {
-  text-align: center;
   margin-bottom: 60px;
   padding: 0 20px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-content>div:first-child {
+  text-align: center;
+  flex: 1;
+  min-width: 300px;
+}
+
+/* View 모드 선택 버튼 */
+.view-mode-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.view-mode-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #e50914;
+  transform: translateY(-2px);
+}
+
+.view-mode-btn.active {
+  background: #e50914;
+  border-color: #e50914;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.5);
 }
 
 .popular-title {
@@ -61,6 +124,7 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -77,10 +141,25 @@
   animation: fadeIn 0.8s ease-out;
 }
 
+/* Table View 그리드: 모든 컨텐츠가 한 페이지에 보이도록 */
+.movie-grid.table-grid {
+  /* max-height: calc(100vh - 400px); Removed to allow full scroll */
+  overflow-y: visible;
+  /* Changed from auto to visible */
+  padding-right: 0;
+  /* Changed */
+}
+
+/* Infinite Scroll 그리드: 스크롤 가능 */
+.movie-grid.infinite-grid {
+  padding-bottom: 100px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -213,8 +292,10 @@
 
   .movie-grid {
     grid-template-columns: repeat(3, 1fr);
-    padding: 0 30px;
-    gap: 20px;
+    padding: 0 25px;
+    /* 패딩 최적화 */
+    gap: 18px;
+    /* 간격 미세 조정 */
   }
 
   .pagination {
@@ -254,8 +335,10 @@
 
   .movie-grid {
     grid-template-columns: repeat(2, 1fr);
-    padding: 0 20px;
-    gap: 15px;
+    padding: 0 18px;
+    /* 좌우 여백 최적화 */
+    gap: 12px;
+    /* 카드 간격 조정 */
     margin-bottom: 40px;
   }
 
@@ -322,3 +405,98 @@
   }
 }
 
+/* 무한 스크롤 관련 스타일 */
+.loading-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 20px;
+}
+
+.loading-more p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.no-more-movies {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+}
+
+/* Top 버튼 */
+.top-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #e50914, #ff6b6b);
+  color: white;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.5);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.top-button:hover {
+  background: linear-gradient(135deg, #f40612, #ff7b7b);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(229, 9, 20, 0.7);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 반응형: View 모드 선택 버튼 */
+@media (max-width: 767px) {
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-content>div:first-child {
+    width: 100%;
+  }
+
+  .view-mode-selector {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .view-mode-btn {
+    flex: 1;
+    max-width: 150px;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+  }
+
+  .top-button {
+    width: 50px;
+    height: 50px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0.8rem;
+  }
+}
