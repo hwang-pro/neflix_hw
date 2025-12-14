@@ -329,8 +329,7 @@ function Search() {
 
       {/* 검색 헤더 */}
       <div className="search-header">
-        <h1 className="search-title">🔍 찾아보기</h1>
-        <p className="search-subtitle">원하는 영화를 검색하고 다양한 필터로 탐색해보세요</p>
+        <h1 className="search-title">찾아보기</h1>
 
         {/* View Mode Toggle */}
         <div className="view-toggle">
@@ -338,14 +337,12 @@ function Search() {
             className={`toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
             onClick={() => setViewMode('table')}
           >
-            <span className="toggle-icon">📋</span>
             Table View
           </button>
           <button
             className={`toggle-btn ${viewMode === 'infinite' ? 'active' : ''}`}
             onClick={() => setViewMode('infinite')}
           >
-            <span className="toggle-icon">∞</span>
             Infinite Scroll
           </button>
         </div>
@@ -354,34 +351,34 @@ function Search() {
       {/* 검색바 */}
       <form onSubmit={handleSearch} className="search-form">
         <div className="search-input-wrapper">
+          <button type="submit" className="search-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="영화 제목을 입력하세요..."
+            placeholder="영화, 인물, 장르를 검색해보세요"
             className="search-input"
           />
-          <button type="submit" className="search-btn">
-            🔍 검색
-          </button>
         </div>
       </form>
 
       {/* 필터 패널 */}
       <div className="filter-panel">
-        <h2 className="filter-title">🎛️ 고급 필터</h2>
-
         <div className="filter-grid">
           {/* 장르 필터 */}
           <div className="filter-group">
-            <label className="filter-label">장르</label>
             <select
               value={filters.genreId}
               onChange={(e) => handleFilterChange('genreId', e.target.value)}
               className="filter-select"
             >
-              <option value="">모든 장르</option>
+              <option value="">장르 (전체)</option>
               {genres.map(genre => (
                 <option key={genre.id} value={genre.id}>
                   {genre.name}
@@ -392,30 +389,28 @@ function Search() {
 
           {/* 평점 필터 */}
           <div className="filter-group">
-            <label className="filter-label">최소 평점</label>
             <select
               value={filters.minRating}
               onChange={(e) => handleFilterChange('minRating', e.target.value)}
               className="filter-select"
             >
-              <option value="">전체</option>
-              <option value="9">⭐ 9.0 이상</option>
-              <option value="8">⭐ 8.0 이상</option>
-              <option value="7">⭐ 7.0 이상</option>
-              <option value="6">⭐ 6.0 이상</option>
-              <option value="5">⭐ 5.0 이상</option>
+              <option value="">평점 (전체)</option>
+              <option value="9">9.0+</option>
+              <option value="8">8.0+</option>
+              <option value="7">7.0+</option>
+              <option value="6">6.0+</option>
+              <option value="5">5.0+</option>
             </select>
           </div>
 
           {/* 개봉년도 필터 */}
           <div className="filter-group">
-            <label className="filter-label">개봉년도</label>
             <select
               value={filters.year}
               onChange={(e) => handleFilterChange('year', e.target.value)}
               className="filter-select"
             >
-              <option value="">전체</option>
+              <option value="">개봉년도 (전체)</option>
               {years.map(year => (
                 <option key={year} value={year}>
                   {year}년
@@ -426,7 +421,6 @@ function Search() {
 
           {/* 정렬 */}
           <div className="filter-group">
-            <label className="filter-label">정렬</label>
             <select
               value={filters.sortBy}
               onChange={(e) => handleFilterChange('sortBy', e.target.value)}
@@ -436,20 +430,20 @@ function Search() {
               <option value="popularity.asc">인기순 (낮은순)</option>
               <option value="vote_average.desc">평점순 (높은순)</option>
               <option value="vote_average.asc">평점순 (낮은순)</option>
-              <option value="release_date.desc">개봉일 (최신순)</option>
-              <option value="release_date.asc">개봉일 (오래된순)</option>
+              <option value="release_date.desc">최신순</option>
+              <option value="release_date.asc">오래된순</option>
             </select>
           </div>
-        </div>
 
-        {/* 필터 버튼 */}
-        <div className="filter-actions">
-          <button onClick={handleApplyFilters} className="apply-filter-btn">
-            ✨ 필터 적용
-          </button>
-          <button onClick={handleReset} className="reset-filter-btn">
-            🔄 초기화
-          </button>
+          {/* 필터 버튼 */}
+          <div className="filter-actions">
+            <button onClick={handleApplyFilters} className="apply-filter-btn">
+              적용
+            </button>
+            <button onClick={handleReset} className="reset-filter-btn">
+              초기화
+            </button>
+          </div>
         </div>
       </div>
 
@@ -465,11 +459,11 @@ function Search() {
                 <h2 className="results-title">
                   {searchQuery
                     ? `"${searchQuery}" 검색 결과`
-                    : '필터 결과'
+                    : '필터링된 결과'
                   }
                 </h2>
                 <p className="results-count">
-                  총 {movies.length}개의 영화
+                  {movies.length}개의 작품
                 </p>
               </div>
 
@@ -493,12 +487,11 @@ function Search() {
                       {isLoadingMore && (
                         <div className="loading-more">
                           <div className="spinner"></div>
-                          <p>더 많은 영화를 불러오는 중...</p>
                         </div>
                       )}
                       {!hasMore && movies.length > 0 && (
                         <div className="no-more-content">
-                          <p>모든 영화를 불러왔습니다 🎬</p>
+                          <p>모든 작품을 확인했습니다</p>
                         </div>
                       )}
                     </>
@@ -512,7 +505,7 @@ function Search() {
                         disabled={currentPage === 1}
                         className="pagination-btn"
                       >
-                        ◀ 이전
+                        이전
                       </button>
 
                       <div className="page-numbers">
@@ -524,16 +517,16 @@ function Search() {
                         disabled={currentPage === totalPages}
                         className="pagination-btn"
                       >
-                        다음 ▶
+                        다음
                       </button>
                     </div>
                   )}
                 </>
               ) : (
                 <div className="empty-state">
-                  <div className="empty-icon">🎬</div>
+                  <div className="empty-icon"></div>
                   <h3>검색 결과가 없습니다</h3>
-                  <p>다른 검색어나 필터를 시도해보세요</p>
+                  <p>다른 검색어입력하시거나 필터를 변경해보세요</p>
                 </div>
               )}
             </div>
@@ -542,9 +535,9 @@ function Search() {
           {/* 초기 상태 */}
           {!hasSearched && (
             <div className="empty-state">
-              <div className="empty-icon">🎯</div>
-              <h3>영화를 검색해보세요</h3>
-              <p>검색어를 입력하거나 필터를 적용하여 영화를 찾아보세요</p>
+              <div className="empty-icon"></div>
+              <h3>어떤 콘텐츠를 찾고 계신가요?</h3>
+              <p>영화 제목, 인물, 장르를 검색해보세요</p>
             </div>
           )}
         </>
