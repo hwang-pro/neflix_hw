@@ -120,7 +120,7 @@
 /* ... (previous styles) ... */
 
 /* 페이지네이션 */
-.pagination {
+.popular-container .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,46 +129,47 @@
   padding: 0 20px;
 }
 
-.pagination-btn {
-  background: #141414;
-  /* Dark background */
+.popular-container .pagination-btn {
+  background: #2a2a2a;
+  /* Lighter background for visibility */
   color: white;
-  border: 1px solid #333;
+  border: 1px solid #444;
   padding: 12px 30px;
   border-radius: 4px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background: #333;
+.popular-container .pagination-btn:hover:not(:disabled) {
+  background: #444;
   border-color: white;
   transform: translateY(-2px);
 }
 
-.pagination-btn:disabled {
-  background: #000;
-  color: #444;
-  border-color: #222;
+.popular-container .pagination-btn:disabled {
+  background: #111;
+  color: #666;
+  /* Clearer disabled text color */
+  border-color: #333;
   cursor: not-allowed;
   opacity: 1;
-  /* Ensure visible as disabled */
 }
 
 /* 페이지 번호 */
-.page-numbers {
+.popular-container .page-numbers {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.page-number {
+.popular-container .page-number {
   background: transparent;
-  color: #aaa;
-  border: none;
+  color: #ccc;
+  border: 1px solid transparent;
+  /* maintain size */
   padding: 10px 18px;
   border-radius: 4px;
   font-size: 1rem;
@@ -178,21 +179,21 @@
   min-width: 40px;
 }
 
-.page-number:hover {
+.popular-container .page-number:hover {
   color: white;
   background: rgba(255, 255, 255, 0.1);
-  transform: none;
-  border: none;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.page-number.active {
-  background: #e50914;
-  /* Netflix Red */
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
+.popular-container .page-number.active {
+  background: #e50914 !important;
+  /* Force Red */
+  color: white !important;
+  font-weight: 800;
+  border: 1px solid #e50914;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+  /* Glow effect */
   transform: scale(1.1);
-  border: none;
 }
 
 /* 무한 스크롤 관련 스타일 */
