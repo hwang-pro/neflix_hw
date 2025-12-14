@@ -33,7 +33,16 @@ function Search() {
   const [hasSearched, setHasSearched] = useState(false);
 
   // View mode: 'table' or 'infinite'
-  const [viewMode, setViewMode] = useState('infinite');
+  // 뷰 모드 상태 (기본값: 'infinite', 로컬 스토리지에서 불러오기)
+  const [viewMode, setViewMode] = useState(() => {
+    return localStorage.getItem('search_view_mode') || 'infinite';
+  });
+
+  // 뷰 모드 변경 핸들러
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+    localStorage.setItem('search_view_mode', mode);
+  };
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -344,13 +353,13 @@ function Search() {
         <div className="view-toggle">
           <button
             className={`toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
-            onClick={() => setViewMode('table')}
+            onClick={() => handleViewModeChange('table')}
           >
             Table View
           </button>
           <button
             className={`toggle-btn ${viewMode === 'infinite' ? 'active' : ''}`}
-            onClick={() => setViewMode('infinite')}
+            onClick={() => handleViewModeChange('infinite')}
           >
             Infinite Scroll
           </button>
