@@ -159,8 +159,9 @@
   /* Hide scrollbar */
   scrollbar-width: none;
   -ms-overflow-style: none;
-  height: 280px;
-  /* Fixed height for consistent alignment */
+  height: 380px;
+  /* Increased height to prevent clipping */
+  min-height: 380px;
 }
 
 .top-10-list::-webkit-scrollbar {
@@ -207,10 +208,10 @@
 
 .top-10-item .movie-card {
   z-index: 2;
-  width: 180px;
+  width: 200px;
   /* Wider card */
-  height: 260px;
-  /* Taller card */
+  height: 320px;
+  /* Increased height to prevent clipping */
   object-fit: cover;
   margin-left: 130px;
   /* Adjusted overlap position */
