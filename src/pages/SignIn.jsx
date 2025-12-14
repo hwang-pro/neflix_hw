@@ -62,15 +62,19 @@ function SignIn() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // 입력값 공백 제거
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
     // 비동기 함수이므로 await 필요
-    const result = await tryLogin(email, password);
+    const result = await tryLogin(trimmedEmail, trimmedPassword);
 
     if (result.success) {
       showToast(result.message, 'success');
 
       // Remember Me 체크 시 이메일 저장
       if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem('rememberedEmail', trimmedEmail);
       }
 
       // 1초 후 홈으로 이동
@@ -92,11 +96,16 @@ function SignIn() {
       return;
     }
 
-    const result = await tryRegister(email, password, confirmPassword);
+    // 입력값 공백 제거
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedConfirm = confirmPassword.trim();
+
+    const result = await tryRegister(trimmedEmail, trimmedPassword, trimmedConfirm);
 
     if (result.success) {
       // 실제로 사용자 저장
-      const saveResult = saveUser(email, password);
+      const saveResult = saveUser(trimmedEmail, trimmedPassword);
 
       if (saveResult.success) {
         showToast('회원가입이 완료되었습니다! 로그인해주세요.', 'success');
