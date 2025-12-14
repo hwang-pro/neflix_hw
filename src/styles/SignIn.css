@@ -29,18 +29,63 @@
   z-index: 0;
 }
 
+/* 3D Flip Container */
+.flip-container {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 450px;
+  min-height: 580px;
+  position: relative;
+  z-index: 10;
+}
+
+.flipper {
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.flipper.flipped {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
 /* 메인 카드 */
 .signin-card {
   width: 100%;
-  max-width: 450px;
-  background: rgba(0, 0, 0, 0.75);
+  height: 100%;
+  max-width: none;
+  min-height: 580px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  background: rgba(0, 0, 0, 0.85);
   border-radius: 4px;
   padding: 60px 68px 40px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   z-index: 1;
-  position: relative;
-  /* Ensure z-index works */
-  min-height: 500px;
 }
 
 /* 로고 */
@@ -270,69 +315,4 @@
   .signin-container::before {
     display: none;
   }
-
-  .demo-info {
-    display: none;
-    /* Optional: Hide demo info on very small screens to focus on login */
-  }
-}
-
-/* 3D Flip Animation */
-.flip-container {
-  perspective: 1000px;
-  width: 100%;
-  max-width: 450px;
-  min-height: 580px;
-  position: relative;
-  z-index: 10;
-  /* margin: 0 auto; REMOVED to allow side-by-side */
-}
-
-.flipper {
-  transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transform-style: preserve-3d;
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.flipper.flipped {
-  transform: rotateY(180deg);
-}
-
-.front,
-.back {
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-}
-
-.front {
-  z-index: 2;
-  transform: rotateY(0deg);
-}
-
-.back {
-  transform: rotateY(180deg);
-}
-
-/* Override existing card values for 3D context */
-.signin-card {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  min-height: 580px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  backface-visibility: hidden;
-  background: rgba(0, 0, 0, 0.85);
-}
-
-.card-title {
-  margin-bottom: 20px;
 }

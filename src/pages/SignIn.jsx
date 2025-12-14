@@ -152,25 +152,29 @@ function SignIn() {
                   <div className="form-group">
                     <input
                       type="email"
+                      id="email"
                       value={email}
                       onChange={handleEmailChange}
                       placeholder=" "
                       className={emailError ? 'input-error' : ''}
                       required
                     />
-                    <label>이메일</label>
+                    <label htmlFor="email">이메일</label>
                     {emailError && <span className="error-message">{emailError}</span>}
                   </div>
+
                   <div className="form-group">
                     <input
                       type="password"
+                      id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder=" "
                       required
                     />
-                    <label>비밀번호</label>
+                    <label htmlFor="password">비밀번호</label>
                   </div>
+
                   <div className="checkbox-group">
                     <label className="checkbox-label">
                       <input
@@ -181,11 +185,17 @@ function SignIn() {
                       <span>로그인 상태 유지</span>
                     </label>
                   </div>
+
                   <button type="submit" className="submit-btn">로그인</button>
                 </form>
 
                 <div className="toggle-mode">
-                  <p>계정이 없으신가요? <button onClick={toggleMode} className="toggle-btn">회원가입</button></p>
+                  <p>
+                    계정이 없으신가요?{' '}
+                    <button onClick={toggleMode} className="toggle-btn">
+                      회원가입
+                    </button>
+                  </p>
                 </div>
               </div>
             </div>
@@ -202,35 +212,41 @@ function SignIn() {
                   <div className="form-group">
                     <input
                       type="email"
+                      id="email"
                       value={email}
                       onChange={handleEmailChange}
                       placeholder=" "
                       className={emailError ? 'input-error' : ''}
                       required
                     />
-                    <label>이메일</label>
+                    <label htmlFor="email">이메일</label>
                     {emailError && <span className="error-message">{emailError}</span>}
                   </div>
+
                   <div className="form-group">
                     <input
                       type="password"
+                      id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder=" "
                       required
                     />
-                    <label>비밀번호</label>
+                    <label htmlFor="password">비밀번호</label>
                   </div>
+
                   <div className="form-group">
                     <input
                       type="password"
+                      id="confirmPassword"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder=" "
                       required
                     />
-                    <label>비밀번호 확인</label>
+                    <label htmlFor="confirmPassword">비밀번호 확인</label>
                   </div>
+
                   <div className="checkbox-group">
                     <label className="checkbox-label">
                       <input
@@ -241,16 +257,21 @@ function SignIn() {
                       <span>이용약관 및 개인정보처리방침에 동의합니다.</span>
                     </label>
                   </div>
+
                   <button type="submit" className="submit-btn">회원가입</button>
                 </form>
 
                 <div className="toggle-mode">
-                  <p>이미 계정이 있으신가요? <button onClick={toggleMode} className="toggle-btn">로그인</button></p>
+                  <p>
+                    이미 계정이 있으신가요?{' '}
+                    <button onClick={toggleMode} className="toggle-btn">
+                      로그인
+                    </button>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
