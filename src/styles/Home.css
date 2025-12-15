@@ -327,14 +327,19 @@
   }
 
   .hero-section {
-    height: 180px; /* 더 낮게 줄여서 한 화면에 들어오도록 */
-    padding-top: 24px;
+    /* 고정 높이 대신 내용에 맞게 자동 높이 */
+    height: auto;
+    min-height: 0;
+    padding: 56px 0 24px;
+    /* 모바일에서는 마스크 제거 (잘려 보이는 느낌 방지) */
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 
   .hero-content {
     width: 90%;
     margin-left: 5%;
-    padding-top: 0; /* 상단 여백 제거해서 제목/버튼을 더 위로 */
+    padding-top: 0;
   }
 
   .hero-title {
