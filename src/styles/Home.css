@@ -327,7 +327,7 @@
   }
 
   .hero-section {
-    height: 300px; /* 모바일 최적화 */
+    height: 240px; /* 모바일에서 히어로 높이 축소 */
     padding-top: 60px;
   }
 
@@ -343,6 +343,25 @@
 
   .movie-section {
     padding: 30px 0;
+  }
+
+  /* 모바일에서 TOP 10 영역 높이 조정 */
+  .top-10-section {
+    margin-top: -80px;
+  }
+
+  .top-10-list {
+    height: 260px;
+    min-height: 260px;
+    padding: 12px 4%;
+  }
+
+  .top-10-item {
+    min-width: 260px;
+  }
+
+  .rank-number {
+    font-size: 160px;
   }
 
   .section-title {
@@ -372,7 +391,7 @@
 /* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
   .hero-section {
-    height: 200px;
+    height: 190px;
   }
 
   .hero-title {
