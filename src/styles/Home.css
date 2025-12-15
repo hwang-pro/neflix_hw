@@ -347,21 +347,30 @@
 
   /* 모바일에서 TOP 10 영역 높이 조정 */
   .top-10-section {
-    margin-top: 24px; /* 히어로 아래로 충분히 떨어뜨려 첫 카드 전체 노출 */
+    margin-top: 24px; /* 히어로 아래로 여백 확보 */
   }
 
   .top-10-list {
-    height: 230px;
-    min-height: 230px;
-    padding: 10px 4%;
+    height: auto;
+    min-height: 0;
+    padding: 10px 15px;
+    align-items: flex-start;
   }
 
   .top-10-item {
-    min-width: 240px;
+    min-width: 160px; /* 인기 영화 카드와 동일 폭 */
+    margin-right: 12px;
   }
 
   .rank-number {
-    font-size: 150px;
+    font-size: 110px; /* 숫자 크기 축소해서 카드 안 가리도록 */
+  }
+
+  /* TOP10 카드 크기를 아래 섹션(인기 영화) 카드와 동일하게 */
+  .top-10-item .movie-card {
+    width: 160px;
+    height: 240px;
+    margin-left: 70px; /* 숫자와 카드 간 간격만 유지 */
   }
 
   .section-title {
