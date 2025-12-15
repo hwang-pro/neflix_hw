@@ -6,8 +6,8 @@
   align-items: center;
   position: relative;
   background-color: #000;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://assets.nflxext.com/ffe/siteui/vlv3/dace47b4-a5cb-4368-80fe-c26f3e77d540/f5b52435-458f-498f-9d1d-ccd4f1af9913/KR-ko-20231023-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
-  /* Fallback dark background if image fails */
+  /* 간단한 그라데이션 배경 (외부 이미지 404 제거) */
+  background-image: radial-gradient(circle at top, #222 0, #000 55%);
   background-size: cover;
   background-position: center;
   /* Add gap for side-by-side layout and wrap for mobile */
