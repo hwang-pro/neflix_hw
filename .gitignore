@@ -13,7 +13,7 @@
 
 # misc
 .DS_Store
-.env
+# .env - 커밋에 포함 (데모용)
 .env.local
 .env.development.local
 .env.test.local
