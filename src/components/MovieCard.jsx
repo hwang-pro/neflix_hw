@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { getImageUrl } from '../utils/api';
 import '../styles/MovieCard.css';
 
 function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
   // 영화 데이터 검증
   if (!movie) return null;
+
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // 장르 이름 가져오기
   const getGenreNames = (genreIds) => {
@@ -23,8 +26,8 @@ function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
     // 하트 아이콘 클릭 시에는 카드 클릭 무시
     if (e.target.closest('.wishlist-btn')) return;
 
-    // 카드 클릭 시 찜하기 토글 (선택사항 - 영화 상세 페이지 이동 등으로 활용 가능)
-    // onToggleWish(movie);
+    // 모바일 등에서 카드 탭 시 설명 토글
+    setIsExpanded(prev => !prev);
   };
 
   const handleWishClick = (e) => {
@@ -34,7 +37,7 @@ function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
 
   return (
     <div
-      className={`movie-card ${isWished ? 'wished' : ''}`}
+      className={`movie-card ${isWished ? 'wished' : ''} ${isExpanded ? 'expanded' : ''}`}
       onClick={handleCardClick}
     >
       {/* 영화 포스터 */}
