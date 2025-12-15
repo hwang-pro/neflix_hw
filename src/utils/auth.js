@@ -2,6 +2,9 @@
 import { getUsers, login } from './storage';
 import { validateApiKey } from './api';
 
+// 데모용: TMDB API 실제 호출을 건너뛸지 여부 (배포본에서는 true로 사용)
+const SKIP_API_VALIDATION = true;
+
 // 이메일 형식 검증
 export const validateEmail = (email) => {
   // 이메일 정규식 (기본적인 형식 확인)
@@ -71,10 +74,12 @@ export const tryLogin = async (email, password) => {
     return { success: false, message: '비밀번호가 일치하지 않습니다.' };
   }
 
-  // TMDB API 키로 실제 API 호출하여 검증
-  const apiValidation = await validateApiKey(password);
-  if (!apiValidation.success) {
-    return { success: false, message: 'TMDB API 키가 유효하지 않습니다.' };
+  // TMDB API 키 검증 (데모에서는 선택적으로 건너뜀)
+  if (!SKIP_API_VALIDATION) {
+    const apiValidation = await validateApiKey(password);
+    if (!apiValidation.success) {
+      return { success: false, message: 'TMDB API 키가 유효하지 않습니다.' };
+    }
   }
 
   // 로그인 성공
@@ -110,10 +115,12 @@ export const tryRegister = async (email, password, confirmPassword) => {
     return { success: false, message: '이미 존재하는 이메일입니다.' };
   }
 
-  // TMDB API 키로 실제 API 호출하여 검증
-  const apiValidation = await validateApiKey(password);
-  if (!apiValidation.success) {
-    return { success: false, message: 'TMDB API 키가 유효하지 않습니다. 올바른 API 키를 입력해주세요.' };
+  // TMDB API 키 검증 (데모에서는 선택적으로 건너뜀)
+  if (!SKIP_API_VALIDATION) {
+    const apiValidation = await validateApiKey(password);
+    if (!apiValidation.success) {
+      return { success: false, message: 'TMDB API 키가 유효하지 않습니다. 올바른 API 키를 입력해주세요.' };
+    }
   }
 
   // 회원가입 성공 (실제 저장은 SignIn 컴포넌트에서 처리)
