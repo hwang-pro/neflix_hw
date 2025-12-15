@@ -15,6 +15,7 @@
   flex-wrap: wrap;
   padding: 20px;
   /* Prevent edge touching on small screens */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Background Overlay */
@@ -40,7 +41,7 @@
 }
 
 .flipper {
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-style: preserve-3d;
   position: relative;
   width: 100%;
@@ -194,6 +195,11 @@
 
 .submit-btn:hover {
   background: #f40612;
+}
+
+.submit-btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
 }
 
 /* 체크박스 그룹 (기억하기 / 약관) */

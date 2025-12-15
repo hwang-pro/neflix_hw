@@ -18,6 +18,7 @@ function SignIn() {
   // 에러 및 메시지 상태
   const [emailError, setEmailError] = useState('');
   const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 이미 로그인되어 있으면 홈으로 리다이렉트
   useEffect(() => {
@@ -41,6 +42,8 @@ function SignIn() {
 
   // 로그인/회원가입 전환
   const toggleMode = () => {
+    if (isSubmitting) return; // 처리 중에는 전환 막기
+
     setIsLogin(!isLogin);
     // 입력값 초기화
     setEmail('');
@@ -62,27 +65,34 @@ function SignIn() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     // 입력값 공백 제거
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
     // 비동기 함수이므로 await 필요
-    const result = await tryLogin(trimmedEmail, trimmedPassword);
+    try {
+      const result = await tryLogin(trimmedEmail, trimmedPassword);
 
-    if (result.success) {
-      showToast(result.message, 'success');
+      if (result.success) {
+        showToast(result.message, 'success');
 
-      // Remember Me 체크 시 이메일 저장
-      if (rememberMe) {
-        localStorage.setItem('rememberedEmail', trimmedEmail);
+        // Remember Me 체크 시 이메일 저장
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', trimmedEmail);
+        }
+
+        // 모바일에서도 답답하지 않도록 딜레이를 줄임
+        setTimeout(() => {
+          navigate('/');
+        }, 400);
+      } else {
+        showToast(result.message, 'error');
       }
-
-      // 1초 후 홈으로 이동
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
-    } else {
-      showToast(result.message, 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -90,38 +100,46 @@ function SignIn() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+
     // 약관 동의 확인
     if (!agreeTerms) {
       showToast('약관에 동의해주세요.', 'error');
       return;
     }
 
+    setIsSubmitting(true);
+
     // 입력값 공백 제거
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
     const trimmedConfirm = confirmPassword.trim();
 
-    const result = await tryRegister(trimmedEmail, trimmedPassword, trimmedConfirm);
+    try {
+      const result = await tryRegister(trimmedEmail, trimmedPassword, trimmedConfirm);
 
-    if (result.success) {
-      // 실제로 사용자 저장
-      const saveResult = saveUser(trimmedEmail, trimmedPassword);
+      if (result.success) {
+        // 실제로 사용자 저장
+        const saveResult = saveUser(trimmedEmail, trimmedPassword);
 
-      if (saveResult.success) {
-        showToast('회원가입이 완료되었습니다! 로그인해주세요.', 'success');
+        if (saveResult.success) {
+          showToast('회원가입이 완료되었습니다! 로그인해주세요.', 'success');
 
-        // 1초 후 로그인 모드로 전환
-        setTimeout(() => {
-          setIsLogin(true);
-          setPassword('');
-          setConfirmPassword('');
-          setAgreeTerms(false);
-        }, 1500);
+          // 전환 속도를 조금 줄여 모바일 체감 개선
+          setTimeout(() => {
+            setIsLogin(true);
+            setPassword('');
+            setConfirmPassword('');
+            setAgreeTerms(false);
+          }, 600);
+        } else {
+          showToast(saveResult.message, 'error');
+        }
       } else {
-        showToast(saveResult.message, 'error');
+        showToast(result.message, 'error');
       }
-    } else {
-      showToast(result.message, 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -186,13 +204,20 @@ function SignIn() {
                     </label>
                   </div>
 
-                  <button type="submit" className="submit-btn">로그인</button>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                  >
+                    {isSubmitting ? '로그인 중...' : '로그인'}
+                  </button>
                 </form>
 
                 <div className="toggle-mode">
                   <p>
                     계정이 없으신가요?{' '}
-                    <button onClick={toggleMode} className="toggle-btn">
+                    <button onClick={toggleMode} className="toggle-btn" disabled={isSubmitting}>
                       회원가입
                     </button>
                   </p>
@@ -258,13 +283,20 @@ function SignIn() {
                     </label>
                   </div>
 
-                  <button type="submit" className="submit-btn">회원가입</button>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                  >
+                    {isSubmitting ? '처리 중...' : '회원가입'}
+                  </button>
                 </form>
 
                 <div className="toggle-mode">
                   <p>
                     이미 계정이 있으신가요?{' '}
-                    <button onClick={toggleMode} className="toggle-btn">
+                    <button onClick={toggleMode} className="toggle-btn" disabled={isSubmitting}>
                       로그인
                     </button>
                   </p>
