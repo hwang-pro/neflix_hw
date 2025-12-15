@@ -327,8 +327,14 @@
   }
 
   .hero-section {
-    height: 240px; /* 모바일에서 히어로 높이 축소 */
-    padding-top: 60px;
+    height: 210px; /* 히어로 전체가 한 화면에 더 잘 보이도록 축소 */
+    padding-top: 30px;
+  }
+
+  .hero-content {
+    width: 90%;
+    margin-left: 5%;
+    padding-top: 0; /* 상단 여백 제거해서 제목/버튼을 더 위로 */
   }
 
   .hero-title {
@@ -336,8 +342,8 @@
     line-height: 1.2; /* 줄간격 최적화 */
   }
 
-  .hero-subtitle {
-    font-size: 1rem;
+  .hero-overview {
+    font-size: 0.9rem;
     line-height: 1.5; /* 가독성 향상 */
   }
 
