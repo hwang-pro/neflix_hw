@@ -327,8 +327,8 @@
   }
 
   .hero-section {
-    height: 210px; /* 히어로 전체가 한 화면에 더 잘 보이도록 축소 */
-    padding-top: 30px;
+    height: 180px; /* 더 낮게 줄여서 한 화면에 들어오도록 */
+    padding-top: 24px;
   }
 
   .hero-content {
@@ -342,9 +342,26 @@
     line-height: 1.2; /* 줄간격 최적화 */
   }
 
+  .hero-title {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
   .hero-overview {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
     line-height: 1.5; /* 가독성 향상 */
+    -webkit-line-clamp: 2; /* 설명은 2줄만 */
+  }
+
+  .hero-buttons {
+    gap: 0.5rem;
+  }
+
+  .play-btn,
+  .info-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
   }
 
   .movie-section {
