@@ -347,12 +347,12 @@
 
   /* 모바일에서 TOP 10 영역 높이 조정 */
   .top-10-section {
-    margin-top: -40px; /* 첫 번째 카드가 완전히 보이도록 겹침 정도 축소 */
+    margin-top: 0; /* 히어로와 겹치지 않도록 완전히 아래로 내림 */
   }
 
   .top-10-list {
-    height: 240px;
-    min-height: 240px;
+    height: 230px;
+    min-height: 230px;
     padding: 10px 4%;
   }
 

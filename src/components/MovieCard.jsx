@@ -3,10 +3,10 @@ import { getImageUrl } from '../utils/api';
 import '../styles/MovieCard.css';
 
 function MovieCard({ movie, genres = [], isWished, onToggleWish }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   // 영화 데이터 검증
   if (!movie) return null;
-
-  const [isExpanded, setIsExpanded] = useState(false);
 
   // 장르 이름 가져오기
   const getGenreNames = (genreIds) => {
