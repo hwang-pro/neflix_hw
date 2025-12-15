@@ -118,11 +118,13 @@
   background: transparent;
   border: none;
   color: #fff;
-  pointer-events: none;
-  /* Icon shouldn't be clickable if just decorative */
   padding: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .search-input::placeholder {
