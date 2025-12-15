@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { useLayoutEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
+import MobileNav from './components/MobileNav';
 import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import Popular from './pages/Popular';
@@ -79,6 +80,7 @@ function AppContent() {
           </Routes>
         </div>
       </div>
+      <MobileNav />
     </>
   );
 }
