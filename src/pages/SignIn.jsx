@@ -166,31 +166,33 @@ function SignIn() {
                 <div className="logo"><h1>NETFLIX</h1></div>
                 <h2 className="card-title">로그인</h2>
 
-                <form onSubmit={handleLogin} className="signin-form">
+                <form onSubmit={handleLogin} className="signin-form" noValidate>
                   <div className="form-group">
                     <input
                       type="email"
-                      id="email"
+                      id="login-email"
                       value={email}
                       onChange={handleEmailChange}
                       placeholder=" "
                       className={emailError ? 'input-error' : ''}
-                      required
+                      required={isLogin}
+                      disabled={!isLogin}
                     />
-                    <label htmlFor="email">이메일</label>
+                    <label htmlFor="login-email">이메일</label>
                     {emailError && <span className="error-message">{emailError}</span>}
                   </div>
 
                   <div className="form-group">
                     <input
                       type="password"
-                      id="password"
+                      id="login-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder=" "
-                      required
+                      required={isLogin}
+                      disabled={!isLogin}
                     />
-                    <label htmlFor="password">비밀번호</label>
+                    <label htmlFor="login-password">비밀번호</label>
                   </div>
 
                   <div className="checkbox-group">
@@ -233,43 +235,46 @@ function SignIn() {
                 <div className="logo"><h1>NETFLIX</h1></div>
                 <h2 className="card-title">회원가입</h2>
 
-                <form onSubmit={handleRegister} className="signin-form">
+                <form onSubmit={handleRegister} className="signin-form" noValidate>
                   <div className="form-group">
                     <input
                       type="email"
-                      id="email"
+                      id="register-email"
                       value={email}
                       onChange={handleEmailChange}
                       placeholder=" "
                       className={emailError ? 'input-error' : ''}
-                      required
+                      required={!isLogin}
+                      disabled={isLogin}
                     />
-                    <label htmlFor="email">이메일</label>
+                    <label htmlFor="register-email">이메일</label>
                     {emailError && <span className="error-message">{emailError}</span>}
                   </div>
 
                   <div className="form-group">
                     <input
                       type="password"
-                      id="password"
+                      id="register-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder=" "
-                      required
+                      required={!isLogin}
+                      disabled={isLogin}
                     />
-                    <label htmlFor="password">비밀번호</label>
+                    <label htmlFor="register-password">비밀번호</label>
                   </div>
 
                   <div className="form-group">
                     <input
                       type="password"
-                      id="confirmPassword"
+                      id="register-confirmPassword"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder=" "
-                      required
+                      required={!isLogin}
+                      disabled={isLogin}
                     />
-                    <label htmlFor="confirmPassword">비밀번호 확인</label>
+                    <label htmlFor="register-confirmPassword">비밀번호 확인</label>
                   </div>
 
                   <div className="checkbox-group">
