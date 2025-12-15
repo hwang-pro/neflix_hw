@@ -347,21 +347,21 @@
 
   /* 모바일에서 TOP 10 영역 높이 조정 */
   .top-10-section {
-    margin-top: -140px; /* 히어로와 더 많이 겹치게 해서 전체 높이 축소 */
+    margin-top: -40px; /* 첫 번째 카드가 완전히 보이도록 겹침 정도 축소 */
   }
 
   .top-10-list {
-    height: 220px;
-    min-height: 220px;
-    padding: 8px 4%;
+    height: 240px;
+    min-height: 240px;
+    padding: 10px 4%;
   }
 
   .top-10-item {
-    min-width: 220px;
+    min-width: 240px;
   }
 
   .rank-number {
-    font-size: 140px;
+    font-size: 150px;
   }
 
   .section-title {
