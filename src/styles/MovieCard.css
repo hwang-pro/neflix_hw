@@ -225,6 +225,11 @@
     height: 240px;
   }
 
+  .movie-overview {
+    display: none;
+    /* Mobile might be too small for text */
+  }
+
   /* 터치 디바이스: 찜하기 버튼 항상 표시 */
   .wishlist-btn {
     width: 38px;
@@ -233,24 +238,9 @@
     transform: scale(1);
   }
 
-  /* 기본 상태에서는 설명/오버레이 숨김 */
   .movie-overlay {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  .movie-overview {
-    display: none;
-  }
-
-  /* 카드 탭으로 확장됐을 때만 설명/오버레이 표시 */
-  .movie-card.expanded .movie-overlay {
-    opacity: 0.95;
+    opacity: 0.9;
     transform: translateY(0);
-  }
-
-  .movie-card.expanded .movie-overview {
-    display: -webkit-box;
   }
 }
 

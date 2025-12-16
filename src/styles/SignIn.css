@@ -6,8 +6,8 @@
   align-items: center;
   position: relative;
   background-color: #000;
-  /* 간단한 그라데이션 배경 (외부 이미지 404 제거) */
-  background-image: radial-gradient(circle at top, #222 0, #000 55%);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://assets.nflxext.com/ffe/siteui/vlv3/dace47b4-a5cb-4368-80fe-c26f3e77d540/f5b52435-458f-498f-9d1d-ccd4f1af9913/KR-ko-20231023-popsignuptwoweeks-perspective_alpha_website_medium.jpg');
+  /* Fallback dark background if image fails */
   background-size: cover;
   background-position: center;
   /* Add gap for side-by-side layout and wrap for mobile */
@@ -15,7 +15,6 @@
   flex-wrap: wrap;
   padding: 20px;
   /* Prevent edge touching on small screens */
-  -webkit-tap-highlight-color: transparent;
 }
 
 /* Background Overlay */
@@ -41,7 +40,7 @@
 }
 
 .flipper {
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-style: preserve-3d;
   position: relative;
   width: 100%;
@@ -195,11 +194,6 @@
 
 .submit-btn:hover {
   background: #f40612;
-}
-
-.submit-btn[disabled] {
-  opacity: 0.6;
-  cursor: default;
 }
 
 /* 체크박스 그룹 (기억하기 / 약관) */

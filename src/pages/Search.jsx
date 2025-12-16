@@ -117,14 +117,10 @@ function Search() {
   };
 
   // 검색어로 영화 검색
-  const handleSearch = async (e, overrideQuery) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
+  const handleSearch = async (e) => {
+    e.preventDefault();
 
-    const query = (overrideQuery !== undefined ? overrideQuery : searchQuery).trim();
-
-    if (!query) {
+    if (!searchQuery.trim()) {
       showToast('검색어를 입력해주세요.');
       return;
     }
@@ -134,11 +130,11 @@ function Search() {
       setHasSearched(true);
       setCurrentPage(1);
 
-      const result = await searchMovies(query, 1);
+      const result = await searchMovies(searchQuery, 1);
 
       if (result.success) {
         // 검색어 저장
-        saveSearchHistory(query);
+        saveSearchHistory(searchQuery);
 
         setMovies(result.data);
         setTotalPages(result.totalPages || 1);
@@ -561,7 +557,7 @@ function Search() {
               <RecentSearches
                 onSearch={(keyword) => {
                   setSearchQuery(keyword);
-                  handleSearch(null, keyword);
+                  handleSearch({ preventDefault: () => { } }, keyword);
                 }}
               />
 

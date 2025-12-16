@@ -71,7 +71,7 @@ export const tryLogin = async (email, password) => {
     return { success: false, message: '비밀번호가 일치하지 않습니다.' };
   }
 
-  // TMDB API 키 실제 검증
+  // TMDB API 키로 실제 API 호출하여 검증
   const apiValidation = await validateApiKey(password);
   if (!apiValidation.success) {
     return { success: false, message: 'TMDB API 키가 유효하지 않습니다.' };
@@ -110,7 +110,7 @@ export const tryRegister = async (email, password, confirmPassword) => {
     return { success: false, message: '이미 존재하는 이메일입니다.' };
   }
 
-  // TMDB API 키 실제 검증
+  // TMDB API 키로 실제 API 호출하여 검증
   const apiValidation = await validateApiKey(password);
   if (!apiValidation.success) {
     return { success: false, message: 'TMDB API 키가 유효하지 않습니다. 올바른 API 키를 입력해주세요.' };
